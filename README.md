@@ -9,4 +9,4 @@ Still having troubles, use this https://www.youtube.com/watch?v=GHvj1ivQ7ms&t=36
 
 4.) flask run (to run the application)
 
-5.) If there are errors related to imported packages, use command “pip install <package name>”
+5.) If there are errors related to imported packages, use command “pip install "<package name>”
