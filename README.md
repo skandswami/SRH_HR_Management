@@ -10,3 +10,6 @@ Still having troubles, use this https://www.youtube.com/watch?v=GHvj1ivQ7ms&t=36
 4.) flask run (to run the application)
 
 5.) If there are errors related to imported packages, use command “pip install "<packagename>”
+### Note
+It is advisable to Create a User for your database(HR_SERVER) as HR_SERVER with password as HR_SERVER.
+Then we wont need change connection strings at all.
