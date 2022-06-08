@@ -5,6 +5,7 @@ from enum import unique
 from threading import local
 from flask import Flask,render_template,request,session,redirect,url_for,flash
 from flask_login import  UserMixin
+import psycopg2
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import login_user,logout_user,LoginManager,login_manager
 from flask_login import login_required,current_user
@@ -24,11 +25,13 @@ login_manager.login_view='HRLog'
 def load_user(user_userid):
     return User.query.get(int(user_userid))
 
-#postgresql://<username>:<userpassword>@localhost:5432/<databasename>
+# postgresql://<username>:<userpassword>@localhost:5432/<databasename>
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
-# mysql = MySQL(app)
+
+def DatabaseConnection():
+      return psycopg2.connect(host="localhost", database ="HR_SERVER", user="HR_SERVER", password="HR_SERVER")
 
 class HR_User(db.Model):
     __table__ = Table('HR_user', Base.metadata,
@@ -142,14 +145,17 @@ def HRReg():
         email=request.form.get('email')
         password=request.form.get('password')
         user=HR_User.query.filter_by(email=email).first()
-        # if user:
-        #     flash("Email Already exists")
-        #     return render_template("HRReg.html")
+        if user:
+            flash("Email Already exists")
+            return render_template("HRReg.html")
         # db.engine.execute('public.sp_create_hruser ?, ?, ?', [username, email, password])
         # db.engine.execute(f"EXEC `sp_create_hruser`({username}, {email}, {password})")
-        newuser = db.engine.execute(f"Call public.sp_create_hruser('{username}', '{password}', '{email}')")
-        db.session.commit()
-        print(str (newuser))
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_create_hruser('{username}', '{password}', '{email}')")
+        conn.commit()
+        # newuser = db.engine.execute(f"Call public.sp_create_hruser('{username}', '{password}', '{email}')")
+        # print(str (newuser))
         # salary_data=db.engine.execute(f"INSERT INTO `salary` (`salary_id`,`employee_id`,`salary`,`bonus`,`benefits`) VALUES ('{salary_id}','{employee_id}','{salary}','{bonus}','{benefits}')")
         # personal_data=db.engine.execute(f"INSERT INTO public.HR_user ('username','password','email') VALUES ('{username}','{password}','{email}')")
         # db.engine.execute(f"INSERT INTO HR_user (username, password, email) VALUES ('{username}','{password}','{email}')")
