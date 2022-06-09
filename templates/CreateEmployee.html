@@ -23,14 +23,14 @@
     /* Style the header */
     header {
       background-color: #666;
-      padding: 30px;
+      padding: 60px;
       text-align: center;
       font-size: 35px;
       color: white;
     } 
     /* Create two columns/boxes that floats next to each other */
     nav {
-      float: left;
+      float: center;
       width: 10%;
       padding: 20px;
     }
@@ -44,15 +44,15 @@
     nav ul  a:link, a:visited {
   
   color: black;
-  padding: 15px 25px;
+  padding: 50px 75px;
   text-align: justify;
   text-decoration: aqua;
   display: inline-block;
 }
     
     article {
-      float: left;
-      padding: 20px;
+      float: center;
+      padding: 80px;
       width: 90%;
       background-color: #f1f1f1;
       
@@ -88,14 +88,7 @@
 </header>
 <section>
 
-  <nav>
-    <ul>
-      <li><a href="CreateEmployee" style="background-color:green;">Add Employee</a></li>
-      <li><a href="DisplayEmpInfo" style="background-color:fuchsia;">Employee Details</a></li>
-      <li><a href="employeelist" style="background-color:grey;">Employee List</a></li>
-      <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
-    </ul>
-  </nav> 
+  
   
   <article>
     {% with messages = get_flashed_messages() %}
@@ -125,14 +118,10 @@
                 <form method="POST" action="">
                     
                     <div class="mb-2">
-                      <a class="btn btn-primary btn-block" href="personaldata" role="button">Personal Data</a>
-                      <a class="btn btn-primary btn-block" href="contactdata" role="button">Contact Data</a>
-                      <a class="btn btn-primary btn-block" href="financedata" role="button">Financial Data</a>
-                      <a class="btn btn-primary btn-block" href="organisationdata" role="button">Organisation Data</a>
-                      <a class="btn btn-primary btn-block" href="Salary" role="button">Salary Data</a>
-                      <a class="btn btn-primary btn-block" href="Leaves" role="button">Leaves Data</a>
-                      <a class="btn btn-primary btn-block" href="skills" role="button">Employee Skills</a>
-                      <a class="btn btn-primary btn-block" href="Equipment" role="button">Equipment Data</a>
+                      <a class="btn btn-primary btn-block" href="CreateEmployee.html" role="button">Create Employee Record</a>
+                      <a class="btn btn-primary btn-block" href="UpdateEmployee.html" role="button">Update Employee Details</a>
+                      <a class="btn btn-primary btn-block" href="SearchEMployee.html" role="button">Search Employee</a>
+                                       
                     </div>
             
                 </form>
