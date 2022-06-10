@@ -23,10 +23,11 @@ login_manager.login_view='HRLog'
 
 @login_manager.user_loader
 def load_user(user_userid):
-    return User.query.get(int(user_userid))
+    return HR_User.query.get(int(user_userid))
 
 # postgresql://<username>:<userpassword>@localhost:5432/<databasename>
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:shweta@localhost:5432/HR_Server'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
 
@@ -163,7 +164,37 @@ def HRReg():
         return render_template("HRLog.html")
     return render_template("HRReg.html")
 
+#################################
+@app.route("/EmployeeAppraisal",methods=['POST','GET'])
+def EmployeeAppraisal():
+    if request.method == "POST":
+        # userid=request.form.get('userid')
+        Emp_perfomance_id=request.form.get('Emp_perfomance_id')
+        Employee_Id=request.form.get('Employee_id')
+        Emp_rating=request.form.get('Emp_rating')
+        Manager_rating=request.form.get('Manager_rating')
+        Remarks=request.form.get('Remarks')
+        #user=HR_User.query.filter_by(email=email).first()
+        #if user:
+            #flash("Email Already exists")
+            #return render_template("HRReg.html")
+        # db.engine.execute('public.sp_create_hruser ?, ?, ?', [username, email, password])
+        # db.engine.execute(f"EXEC `sp_create_hruser`({username}, {email}, {password})")
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_appraisal('{Emp_perfomance_id}', '{Employee_Id}', '{Emp_rating}', '{Manager_rating}', '{Remarks}')")
+        conn.commit()
+        # newuser = db.engine.execute(f"Call public.sp_create_hruser('{username}', '{password}', '{email}')")
+        # print(str (newuser))
+        # salary_data=db.engine.execute(f"INSERT INTO `salary` (`salary_id`,`employee_id`,`salary`,`bonus`,`benefits`) VALUES ('{salary_id}','{employee_id}','{salary}','{bonus}','{benefits}')")
+        # personal_data=db.engine.execute(f"INSERT INTO public.HR_user ('username','password','email') VALUES ('{username}','{password}','{email}')")
+        # db.engine.execute(f"INSERT INTO HR_user (username, password, email) VALUES ('{username}','{password}','{email}')")
+        flash("Perfomrance Review recorded")
+        #return render_template("HRLog.html")
+    return render_template("EmployeeAppraisal.html")
 
+
+#################################
 @app.route("/main")
 def main():
     return render_template("main.html")
@@ -191,7 +222,7 @@ def personaldata():
     return render_template("personaldata.html")
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
-def editpersonaldata(employee_id):
+#def editpersonaldata(employee_id):
 #     post=Personaldata.query.filter_by(employee_id=employee_id).first()
 #     if request.method == 'POST':
 #         employee_id=request.form.get('employee_id')
@@ -205,7 +236,7 @@ def editpersonaldata(employee_id):
 #         db.engine.execute(f"UPDATE `personaldata` SET `employee_id` = '{employee_id}', `fname` = '{fname}',`lname` = '{lname}', `DOB` = '{DOB}',`gender` = '{gender}', `SSN` = '{SSN}', `Nationality` = '{Nationality}',`job_type` = '{job_type}' WHERE `personaldata`.`employee_id` = {employee_id}")
 #         flash("Personal details updated successfully")
 #         return redirect('/displayinfo')
-    return render_template("edit.html",post=post)
+#    return render_template("edit.html",post=post)
 
 @app.route("/contactdata", methods=['GET', 'POST'])
 def contactdata():
@@ -224,7 +255,7 @@ def contactdata():
     return render_template("contactdata.html")
 
 @app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
-def editcontactdata(employee_id):
+#def editcontactdata(employee_id):
 #     posts=Contactdata.query.filter_by(employee_id=employee_id).first()
 #     if request.method == 'POST':
 #         email=request.form.get('email')
@@ -238,7 +269,7 @@ def editcontactdata(employee_id):
 #         db.engine.execute(f"UPDATE `contactdata` SET `email` = '{email}',`employee_id` = '{employee_id}', `address` = '{address}',`city` = '{city}', `state` = '{state}',`plz` = '{plz}', `country` = '{country}', `phone_number` = '{phone_number}' WHERE `contactdata`.`employee_id` = {employee_id}")
 #         flash("Personal details updated successfully")
 #         return redirect('/displayinfo')
-    return render_template("editcontact.html",posts=posts)
+#    return render_template("editcontact.html",posts=posts)
 
 @app.route("/skills", methods=['GET', 'POST'])
 def skills():
