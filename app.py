@@ -27,8 +27,8 @@ login_manager.login_view='HRLogin'
 def load_user(user_userid):
     return HR_User.query.get(int(user_userid))
 
-# postgresql://<username>:<userpassword>@localhost:5432/<databasename>
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
+# postgresql://<username>:<userpassword>@localhost:5433/<databasename>
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5433/HR_SERVER'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
 
@@ -152,8 +152,12 @@ def EmployeeReg():
     return render_template("EmployeeReg.html")
 
 @app.route('/CreateEmployee')
-def create_employee():
+def create_employee1():
     return render_template('CreateEmployee.html')
+
+@app.route('/CreateEmpRecord')
+def create_employee():
+    return render_template('CreateEmpRecord.html')
     
 
 @app.route("/personaldata", methods=['GET', 'POST'])
@@ -390,8 +394,9 @@ if __name__ == '__main__':
 #     def get_id(self):
 #            return (self.userid)
 
+
 # class Personaldata(UserMixin,db.Model):
-#     __tablename__='personaldata'
+#     __tablename__='Emp_Personal_Data'
 #     employee_id=db.Column(db.Integer,primary_key=True)
 #     fname=db.Column(db.String(255))
 #     lname=db.Column(db.String(255))
