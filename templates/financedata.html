@@ -119,28 +119,37 @@
     
             <div class = "col-md-3"></div>
             <div class = "col-md-5 jumbotron">
-                <h4 class = "text-center">Financial Details</h4>
+                <h4 class = "text-center">Employee Bank Details</h4>
                 <br>
                 <form action="" method="post">
                     
+                    <div class="mb-2">
+                      <label for="emp_bank_id" class="form-label">ID</label>
+                      <input type="number" class="form-control" id="emp_bank_id" name = "emp_bank_id" aria-describedby="emailHelp" >
+                    </div>
                     <div class="mb-2">
                         <label for="employee_id" class="form-label">Employee ID</label>
                         <input type="number" class="form-control" id="employee_id" name = "employee_id" aria-describedby="emailHelp" required>
                     </div>
 
                     <div class="mb-2">
-                        <label for="bankname" class="form-label">Bank Name</label>
-                        <input type="text" class="form-control" id="bankname" name = "bankname" aria-describedby="emailHelp" required>
+                      <label for="salary_id" class="form-label">Payroll ID</label>
+                      <input type="number" class="form-control" id="salary_id" name = "salary_id" aria-describedby="emailHelp" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="bank_acc_id" class="form-label">Bank Account ID</label>
+                        <input type="number" class="form-control" id="bank_acc_id" name = "bank_acc_id" aria-describedby="emailHelp" required>
                     </div>
     
                     <div class="mb-2">
-                        <label for="iban" class="form-label">IBAN</label>
-                        <input type="text" class="form-control" id="iban" name = "iban" aria-describedby="emailHelp" required>
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name = "start_date" aria-describedby="emailHelp" required>
                     </div>
                     
                     <div class="mb-2">
-                        <label for="taxid" class="form-label">Tax ID</label>
-                        <input type="number" class="form-control" id="taxid"  name ="taxid" aria-describedby="emailHelp" required>
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="end_date"  name ="end_date" aria-describedby="emailHelp">
                     </div>
                     <br>
                    <button type="submit" class="btn btn-primary btn btn-primary btn-small btn-block">Save</button>

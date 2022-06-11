@@ -123,6 +123,10 @@
                 <br>
                 <form action="" method="post">
                     
+                  <div class="mb-2">
+                    <label for="emp_dept_id" class="form-label">ID</label>
+                    <input type="number" class="form-control" id="emp_dept_id" name = "emp_dept_id" aria-describedby="emailHelp" required>
+                  </div>
                     <div class="mb-2">
                         <label for="employee_id" class="form-label">Employee ID</label>
                         <input type="number" class="form-control" id="employee_id" name = "employee_id" aria-describedby="emailHelp" required>
@@ -134,6 +138,16 @@
                     </div>
 
                     <div class="mb-2">
+                      <label for="join_date" class="form-label">Joining Date</label>
+                      <input type="date" class="form-control" id="join_date" name = "join_date" aria-describedby="emailHelp" required>
+                    </div>
+
+                    <div class="mb-2">
+                      <label for="leave_date" class="form-label">Leaving Date</label>
+                      <input type="date" class="form-control" id="leave_date" name = "leave_date" aria-describedby="emailHelp" required>
+                    </div>
+
+                    <!-- <div class="mb-2">
                       <label for="deptname">Department Name</label>
                       <select type="text" class="form-control" id="deptname" name="deptname" required>
                       <option value="IT">IT</option>
@@ -141,9 +155,9 @@
                       <option value="HR">HR</option>
                       <option value="Marketing">Marketing</option>
                       </select>
-                    </div>
+                    </div> -->
                     
-                    <div class="mb-2">
+                    <!-- <div class="mb-2">
                         <label for="managername" class="form-label">Manager Name</label>
                         <input type="text" class="form-control" id="managername"  name ="managername" aria-describedby="emailHelp" required>
                     </div>
@@ -166,7 +180,7 @@
                     <div class="mb-2">
                         <label for="contractordetails" class="form-label">Contractor Details(only for contract employees)</label>
                         <textarea type="text" class="form-control" id="contractordetails" name = "contractordetails" aria-describedby="emailHelp"></textarea>
-                    </div>
+                    </div> -->
 
                     <br>
                    <button type="submit" class="btn btn-primary btn btn-primary btn-small btn-block">Save</button>

@@ -183,31 +183,36 @@ def skills():
 
 @app.route("/financedata", methods=['GET', 'POST'])
 def financedata():
-#     if request.method == 'POST':
-#         employee_id=request.form.get('employee_id')
-#         bankname=request.form.get('bankname')
-#         iban=request.form.get('iban')
-#         taxid=request.form.get('taxid')
-#         finance_data=db.engine.execute(f"INSERT INTO `financedata` (`employee_id`,`bankname`,`iban`,`taxid`) VALUES ('{employee_id}','{bankname}','{iban}','{taxid}')")
-#         flash("Employee finance Information created Successully")
-#         return redirect('/CreateEmployee')
+    if request.method == 'POST':
+        emp_bank_id=request.form.get('emp_bank_id')
+        employee_id=request.form.get('employee_id')
+        salary_id=request.form.get('salary_id')
+        bank_acc_id=request.form.get('bank_acc_id')
+        start_date=request.form.get('start_date')
+        end_date=request.form.get('end_date')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_bank_info('{emp_bank_id}', '{employee_id}', '{bank_acc_id}', '{start_date}', '{end_date}', '{salary_id}')")
+        conn.commit()
+        flash("Employee finance Information created Successully")
+        return redirect('/CreateEmployee')
     return render_template("financedata.html")
 
-# @app.route("/organisationdata", methods=['GET', 'POST'])
-# def organisationdata():
-#     if request.method == 'POST':
-#         employee_id=request.form.get('employee_id')
-#         department_id=request.form.get('deptid')
-#         department_name=request.form.get('deptname')
-#         manager_name=request.form.get('managername')
-#         office_building=request.form.get('building')
-#         office_location=request.form.get('location')
-#         basecontractor=request.form.get('contractor')
-#         contractordetails=request.form.get("contractordetails")
-#         organisation_data=db.engine.execute(f"INSERT INTO `organisationdata` (`employee_id`,`department_id`,`depatment_name`,`manager_name`,`office_building`,`office_location`,`basecontractor`,`contractordetails`) VALUES ('{employee_id}','{department_id}','{department_name}','{manager_name}','{office_building}','{office_location}','{basecontractor}','{contractordetails}')")
-#         flash("Employee organisation Information created Successully")
-#         return redirect('/CreateEmployee')
-#     return render_template("organisationdata.html")
+@app.route("/organisationdata", methods=['GET', 'POST'])
+def organisationdata():
+    if request.method == 'POST':
+        emp_dept_id=request.form.get('emp_dept_id')
+        employee_id=request.form.get('employee_id')
+        department_id=request.form.get('deptid')
+        join_date=request.form.get('join_date')
+        leave_date=request.form.get('leave_date')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_dept('{emp_dept_id}', '{department_id}', '{employee_id}', '{join_date}', '{leave_date}')")
+        conn.commit()
+        flash("Employee organisation Information created Successully")
+        return redirect('/CreateEmployee')
+    return render_template("organisationdata.html")
 
 # @app.route('/Leaves', methods=['GET', 'POST'])
 # def Leaves():
