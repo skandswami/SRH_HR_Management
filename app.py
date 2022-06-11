@@ -46,6 +46,13 @@ class HR_User(UserMixin, db.Model):
     __table__ = Table('HR_user', Base.metadata,
                     autoload=True, autoload_with=db.engine)
 
+class EmployeeLogin(db.Model):
+    __table__ = Table('Employee_Login', Base.metadata,
+                    autoload=True, autoload_with=db.engine)
+
+class Employee(db.Model):
+    __table__ = Table('Employee_table', Base.metadata,
+                    autoload=True, autoload_with=db.engine)
 
 
 @app.route("/")
@@ -68,10 +75,24 @@ def HRLog():
             return render_template("HRLog.html")
     return render_template("HRLog.html")
 
+@app.route("/EmployeeLogin",methods=['POST','GET'])
+def EmployeeLogin():
+    if request.method == "POST":
+        email=request.form.get('email')
+        password=request.form.get('password')
+        user= EmployeeLogin.query.filter_by(email=email).first()
+        password_check=EmployeeLogin.query.filter_by(password=HashFromPassword(password)).first()
+        if user and password_check:
+            flash("Successful Login")
+            return redirect(url_for("main"))
+        else:
+            flash("Invalid email or password","danger")
+            return render_template("EmployeeLogin.html")
+    return render_template("EmployeeLogin.html")
+
 @app.route("/HRReg",methods=['POST','GET'])
 def HRReg():
     if request.method == "POST":
-        # userid=request.form.get('userid')
         username=request.form.get('username')
         email=request.form.get('email')
         password=request.form.get('password')
@@ -92,10 +113,43 @@ def HRReg():
         flash("New user created")
         return render_template("HRLog.html")
     return render_template("HRReg.html")
+
 @app.route("/main")
 def main():
     return render_template("main.html")
-         
+
+@app.route("/EmployeeReg",methods=['POST','GET'])
+def EmployeeReg():
+    if request.method == "POST":
+        username=request.form.get('username')
+        email=request.form.get('email')
+        password=request.form.get('password')
+        employee = Employee.query.filter_by(Email=email).first()
+        print(employee)
+        if employee is None:
+            flash("Not a registered employee")
+            print("Not a registered employee")
+            return render_template("EmployeeReg.html")
+        print(employee)
+        employeeId = employee.Employee_ID
+        print(employeeId)
+        user = EmployeeLogin.query.filter_by(email=email).first()
+        if user:
+            flash("Email Already exists")
+            return render_template("EmployeeReg.html")
+        user = HR_User.query.filter_by(username=username).first()
+        if user:
+            flash("Email Already exists")
+            return render_template("EmployeeReg.html")
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        hashpassword = HashFromPassword(password)
+        print(hashpassword)
+        cur.execute(f"Call public.sp_create_employeeuser('{username}', '{hashpassword}', '{email}',{employeeId})")
+        conn.commit()
+        flash("New user created")
+        return render_template("EmployeeLogin.html")
+    return render_template("EmployeeReg.html")
 
 @app.route('/CreateEmployee')
 def create_employee():
@@ -301,6 +355,21 @@ def organisationdata():
 #     db.engine.execute(f"DELETE FROM `equipment` WHERE `equipment`.`employee_id`={eid}")
 #     flash("all the data deleted successfully")
 #     return redirect("/DisplayEmpInfo") 
+
+@app.route("/EmployeeAppraisal",methods=['POST','GET'])
+def EmployeeAppraisal():
+    if request.method == "POST":
+        Emp_perfomance_id=request.form.get('Emp_perfomance_id')
+        Employee_Id=request.form.get('Employee_id')
+        Emp_rating=request.form.get('Emp_rating')
+        Manager_rating=request.form.get('Manager_rating')
+        Remarks=request.form.get('Remarks')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_appraisal('{Emp_perfomance_id}', '{Employee_Id}', '{Emp_rating}', '{Manager_rating}', '{Remarks}')")
+        conn.commit()
+        flash("Perfomrance Review recorded")
+    return render_template("EmployeeAppraisal.html")
 
 @app.route('/employeelist')
 def employeelist():
