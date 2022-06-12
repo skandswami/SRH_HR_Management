@@ -53,6 +53,17 @@ begin
 end;
 $BODY$;
 
+CREATE OR REPLACE PROCEDURE public.add_leave_type(
+	IN leave_code character varying,
+	IN leave_description character varying,
+	IN maxleaves integer)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+    insert into "Employee_Login" ("Leaves_code", "Leaves_Type_Desct", "Total_Applicable")
+    values (leave_code, leave_description, maxleaves); 
+end;
+$BODY$;
 -- PROCEDURE: public.sp_emp_appraisal_view(integer,integer,integer,integer,character varying)
 
 CREATE OR REPLACE PROCEDURE public.sp_emp_appraisal_view(
