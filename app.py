@@ -76,7 +76,7 @@ def HRLog():
     return render_template("HRLog.html")
 
 @app.route("/EmployeeLogin",methods=['POST','GET'])
-def EmployeeLogin():
+def EmployeeLog():
     if request.method == "POST":
         email=request.form.get('email')
         password=request.form.get('password')
@@ -137,9 +137,9 @@ def EmployeeReg():
         if user:
             flash("Email Already exists")
             return render_template("EmployeeReg.html")
-        user = HR_User.query.filter_by(username=username).first()
+        user = EmployeeLogin.query.filter_by(username=username).first()
         if user:
-            flash("Email Already exists")
+            flash("Username Already exists")
             return render_template("EmployeeReg.html")
         conn = DatabaseConnection()
         cur = conn.cursor()
