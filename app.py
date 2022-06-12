@@ -27,8 +27,8 @@ login_manager.login_view='HRLogin'
 def load_user(user_userid):
     return HR_User.query.get(int(user_userid))
 
-# postgresql://<username>:<userpassword>@localhost:5432/<databasename>
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
+# postgresql://<username>:<userpassword>@localhost:5433/<databasename>
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5433/HR_SERVER'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
 
@@ -76,7 +76,7 @@ def HRLog():
     return render_template("HRLog.html")
 
 @app.route("/EmployeeLogin",methods=['POST','GET'])
-def EmployeeLogin():
+def EmployeeLog():
     if request.method == "POST":
         email=request.form.get('email')
         password=request.form.get('password')
@@ -137,9 +137,9 @@ def EmployeeReg():
         if user:
             flash("Email Already exists")
             return render_template("EmployeeReg.html")
-        user = HR_User.query.filter_by(username=username).first()
+        user = EmployeeLogin.query.filter_by(username=username).first()
         if user:
-            flash("Email Already exists")
+            flash("Username Already exists")
             return render_template("EmployeeReg.html")
         conn = DatabaseConnection()
         cur = conn.cursor()
@@ -151,26 +151,59 @@ def EmployeeReg():
         return render_template("EmployeeLogin.html")
     return render_template("EmployeeReg.html")
 
-@app.route('/CreateEmployee')
-def create_employee():
-    return render_template('CreateEmployee.html')
-    
+# @app.route('/CreateEmpRecord')
+# def create_employee1():
+#     return render_template('CreateEmpRecord.html')
 
-@app.route("/personaldata", methods=['GET', 'POST'])
-def personaldata():
-    # if request.method == 'POST':
-    #     employee_id=request.form.get('employee_id')
-    #     fname=request.form.get('fname')
-    #     lname=request.form.get('lname')
-    #     DOB=request.form.get('DOB')
-    #     gender=request.form.get('gender')
-    #     SSN=request.form.get('SSnumber')
-    #     Nationality=request.form.get("nationality")
-    #     job_type=request.form.get('job_title')
-    #     personal_data=db.engine.execute(f"INSERT INTO `personaldata` (`employee_id`,`fname`,`lname`,`DOB`,`gender`,`SSN`,`Nationality`,`job_type`) VALUES ('{employee_id}','{fname}','{lname}','{DOB}','{gender}','{SSN}','{Nationality}','{job_type}')")
-    #     flash("Employee personal Information created Successully")
-    #     return redirect('/CreateEmployee')
-    return render_template("personaldata.html")
+@app.route("/CreateEmpRecord", methods=['GET', 'POST'])
+def create_employee():
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        job_id=request.form.get('job_id')
+        first_name=request.form.get('fname')
+        middle_name=request.form.get('mname')
+        last_name=request.form.get('lname')
+        email=request.form.get('empemail')
+        mobile=request.form.get('mobileno')
+        date_of_joining=request.form.get('doj')
+        date_of_leaving=request.form.get('dol')
+        manager_id=request.form.get('managerid')
+        gender=request.form.get('gender')
+        accrued_leaves=request.form.get("Accleaves")
+        shift_code=request.form.get('shiftcd')
+        dept_no=request.form.get('deptno')
+        emp_type_id=request.form.get('emptypid')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.cr_new_emp({employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{date_of_leaving}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
+        conn.commit()
+        flash("Employee Information created Successully")
+        return redirect('/CreateEmpRecord')
+    return render_template("CreateEmpRecord.html")
+
+
+@app.route("/CreateEmpPersonaldata", methods=['GET', 'POST'])
+def CreateEmpPersonaldata():
+    if request.method == 'POST':
+        emp_personal_id=request.form.get('emp_pid')
+        empid=request.form.get('empid')
+        marital_status=request.form.get('maritalstat')
+        qualification=request.form.get('qualification')
+        last_employer=request.form.get('lastemployer')
+        last_employer_address=request.form.get('lastempadd')
+        last_employer_contact=request.form.get('lastempcont')
+        previous_role=request.form.get('prevrole')
+        tax_id=request.form.get('taxid')
+        date_of_birth=request.form.get("DOB")
+        nationality=request.form.get("nationality")
+        blood_group=request.form.get('bloddgrp')
+        conn = DatabaseConnection()
+        cur = conn.cursor()    
+        cur.execute(f"Call public.personal_data_emp (`{emp_personal_id}`,`{empid}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,`{last_employer_contact}`,`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
+        conn.commit()
+        flash("Employee personal Information created Successully")
+        return redirect('/CreateEmpPersonaldata')
+    return render_template("CreateEmpPersonaldata.html")
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
 def editpersonaldata(employee_id):
@@ -399,8 +432,9 @@ if __name__ == '__main__':
 #     def get_id(self):
 #            return (self.userid)
 
+
 # class Personaldata(UserMixin,db.Model):
-#     __tablename__='personaldata'
+#     __tablename__='Emp_Personal_Data'
 #     employee_id=db.Column(db.Integer,primary_key=True)
 #     fname=db.Column(db.String(255))
 #     lname=db.Column(db.String(255))
