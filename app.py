@@ -9,9 +9,11 @@ import psycopg2
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import login_user,logout_user,LoginManager,login_manager
 from flask_login import login_required,current_user
-from sqlalchemy import Table, Column, Integer, ForeignKey,exists
+from sqlalchemy import Table, Column, Integer, ForeignKey, exists
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+import hashlib
+import os
 
 Base = declarative_base()
 
@@ -19,103 +21,40 @@ app = Flask(__name__)
 app.secret_key = "super secret key"
 
 login_manager=LoginManager(app)
-login_manager.login_view='HRLog'
+login_manager.login_view='HRLogin'
 
 @login_manager.user_loader
 def load_user(user_userid):
     return HR_User.query.get(int(user_userid))
 
-# postgresql://<username>:<userpassword>@localhost:5432/<databasename>
+# postgresql://<username>:<userpassword>@localhost:5433/<databasename>
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:shweta@localhost:5432/HR_Server'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
 
+# global functions
 def DatabaseConnection():
       return psycopg2.connect(host="localhost", database ="HR_SERVER", user="HR_SERVER", password="HR_SERVER")
 
-class HR_User(db.Model):
+def HashFromPassword(password):
+    salt = os.urandom(32) 
+    hash_object = hashlib.sha256(password.encode('utf-8'))
+    hex_dig = hash_object.hexdigest()
+    return hex_dig
+
+class HR_User(UserMixin, db.Model):
     __table__ = Table('HR_user', Base.metadata,
                     autoload=True, autoload_with=db.engine)
 
-# class HR_User(UserMixin,db.Model):
-#     userid=db.Column(db.Integer,primary_key=True, autoincrement=True)
-#     username=db.Column(db.String(50), unique= True)
-#     email=db.Column(db.String(50),unique=True)
-#     password=db.Column(db.String(1000))
-#     def get_id(self):
-#            return (self.userid)
+class EmployeeLogin(db.Model):
+    __table__ = Table('Employee_Login', Base.metadata,
+                    autoload=True, autoload_with=db.engine)
 
-# class Personaldata(UserMixin,db.Model):
-#     __tablename__='personaldata'
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     fname=db.Column(db.String(255))
-#     lname=db.Column(db.String(255))
-#     DOB=db.Column(db.String(50),nullable=False)
-#     gender=db.Column(db.String(50))
-#     SSN=db.Column(db.Integer)
-#     Nationality=db.Column(db.String(255))
-#     job_type=db.Column(db.String(255))
-#     def get_eid(self):
-#            return (self.employee_id)
+class Employee(db.Model):
+    __table__ = Table('Employee_table', Base.metadata,
+                    autoload=True, autoload_with=db.engine)
 
-# class Contactdata(db.Model):
-#     __tablename__='contactdata'
-#     email=db.Column(db.String(255),primary_key=True)
-#     employee_id=db.Column(db.Integer)
-#     address=db.Column(db.String(255))
-#     city=db.Column(db.String(255))
-#     state=db.Column(db.String(255))
-#     plz=db.Column(db.Integer)
-#     country=db.Column(db.String(255))
-#     phone_number=db.Column(db.Integer)
-
-# class Skills(db.Model):
-#     __tablename__='skills'
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     highest_education=db.Column(db.String(255))
-#     skillset=db.Column(db.String(255))
-#     work_exp=db.Column(db.Integer)
-#     wexp_details=db.Column(db.String(255))
-
-# class Financedata(db.Model):
-#     __tablename__='financedata'
-#     employee_id=db.Column(db.Integer)
-#     bankname=db.Column(db.String(255))
-#     iban=db.Column(db.String(255),primary_key=True)
-#     taxid=db.Column(db.Integer)
-
-# class Organisationdata(db.Model):
-#     __tablename__='organisationdata'
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     department_id=db.Column(db.Integer)
-#     depatment_name=db.Column(db.String(255))
-#     manager_name=db.Column(db.String(255))
-#     office_building=db.Column(db.Integer)
-#     office_location=db.Column(db.String(255))
-#     basecontractor=db.Column(db.String(255))
-#     contractordetails=db.Column(db.String(255))
-
-# class Leaves(db.Model):
-#     __tablename__='leaves'
-#     SNo=db.Column(db.Integer,primary_key=True)
-#     employee_id=db.Column(db.Integer,unique=True)
-#     leaves_allocated=db.Column(db.Integer)
-#     leaves_utilised=db.Column(db.Integer)
-#     leaves_remaining=db.Column(db.Integer)
-
-# class Salary(db.Model):
-#     __tablename__='salary'
-#     salary_id=db.Column(db.Integer,primary_key=True)
-#     employee_id = db.Column(db.Integer,unique=True)
-#     salary=db.Column(db.Integer)
-#     bonus=db.Column(db.Integer)
-#     benefits=db.Column(db.String(255))
-
-# class Equipment(db.Model):
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     equip_num_data=db.Column(db.String(255))
-#Main Page - Login Page
 
 @app.route("/")
 def index():
@@ -128,38 +67,50 @@ def HRLog():
         email=request.form.get('email')
         password=request.form.get('password')
         user=HR_User.query.filter_by(email=email).first()
-        password_check=HR_User.query.filter_by(password=password).first()
+        password_check=HR_User.query.filter_by(password=HashFromPassword(password)).first()
         if user and password_check:
-            login_user(user)
             flash("Successful Login")
-            return redirect(url_for("main"))
+            return redirect(url_for("HRDashboard"))
         else:
             flash("Invalid email or password","danger")
             return render_template("HRLog.html")
     return render_template("HRLog.html")
 
+@app.route("/EmployeeLogin",methods=['POST','GET'])
+def EmployeeLog():
+    if request.method == "POST":
+        email=request.form.get('email')
+        password=request.form.get('password')
+        user= EmployeeLogin.query.filter_by(email=email).first()
+        password_check=EmployeeLogin.query.filter_by(password=HashFromPassword(password)).first()
+        if user and password_check:
+            flash("Successful Login")
+            return redirect(url_for("EmployeeDashboard"))
+        else:
+            flash("Invalid email or password","danger")
+            return render_template("EmployeeLogin.html")
+    return render_template("EmployeeLogin.html")
+
 @app.route("/HRReg",methods=['POST','GET'])
 def HRReg():
     if request.method == "POST":
-        # userid=request.form.get('userid')
         username=request.form.get('username')
         email=request.form.get('email')
         password=request.form.get('password')
-        user=HR_User.query.filter_by(email=email).first()
+        user = HR_User.query.filter_by(email=email).first()
         if user:
             flash("Email Already exists")
             return render_template("HRReg.html")
-        # db.engine.execute('public.sp_create_hruser ?, ?, ?', [username, email, password])
-        # db.engine.execute(f"EXEC `sp_create_hruser`({username}, {email}, {password})")
+        user = HR_User.query.filter_by(username=username).first()
+        if user:
+            flash("Email Already exists")
+            return render_template("HRReg.html")
         conn = DatabaseConnection()
         cur = conn.cursor()
-        cur.execute(f"Call public.sp_create_hruser('{username}', '{password}', '{email}')")
+        hashpassword = HashFromPassword(password)
+        print(hashpassword)
+        cur.execute(f"Call public.sp_create_hruser('{username}', '{hashpassword}', '{email}')")
         conn.commit()
-        # newuser = db.engine.execute(f"Call public.sp_create_hruser('{username}', '{password}', '{email}')")
-        # print(str (newuser))
-        # salary_data=db.engine.execute(f"INSERT INTO `salary` (`salary_id`,`employee_id`,`salary`,`bonus`,`benefits`) VALUES ('{salary_id}','{employee_id}','{salary}','{bonus}','{benefits}')")
-        # personal_data=db.engine.execute(f"INSERT INTO public.HR_user ('username','password','email') VALUES ('{username}','{password}','{email}')")
-        # db.engine.execute(f"INSERT INTO HR_user (username, password, email) VALUES ('{username}','{password}','{email}')")
         flash("New user created")
         return render_template("HRLog.html")
     return render_template("HRReg.html")
@@ -198,28 +149,93 @@ def EmployeeAppraisal():
 @app.route("/main")
 def main():
     return render_template("main.html")
-         
 
-@app.route('/CreateEmployee')
+@app.route("/EmployeeReg",methods=['POST','GET'])
+def EmployeeReg():
+    if request.method == "POST":
+        username=request.form.get('username')
+        email=request.form.get('email')
+        password=request.form.get('password')
+        employee = Employee.query.filter_by(Email=email).first()
+        print(employee)
+        if employee is None:
+            flash("Not a registered employee")
+            print("Not a registered employee")
+            return render_template("EmployeeReg.html")
+        print(employee)
+        employeeId = employee.Employee_ID
+        print(employeeId)
+        user = EmployeeLogin.query.filter_by(email=email).first()
+        if user:
+            flash("Email Already exists")
+            return render_template("EmployeeReg.html")
+        user = EmployeeLogin.query.filter_by(username=username).first()
+        if user:
+            flash("Username Already exists")
+            return render_template("EmployeeReg.html")
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        hashpassword = HashFromPassword(password)
+        print(hashpassword)
+        cur.execute(f"Call public.sp_create_employeeuser('{username}', '{hashpassword}', '{email}',{employeeId})")
+        conn.commit()
+        flash("New user created")
+        return render_template("EmployeeLogin.html")
+    return render_template("EmployeeReg.html")
+
+# @app.route('/CreateEmpRecord')
+# def create_employee1():
+#     return render_template('CreateEmpRecord.html')
+
+@app.route("/CreateEmpRecord", methods=['GET', 'POST'])
 def create_employee():
-    return render_template('CreateEmployee.html')
-    
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        job_id=request.form.get('job_id')
+        first_name=request.form.get('fname')
+        middle_name=request.form.get('mname')
+        last_name=request.form.get('lname')
+        email=request.form.get('empemail')
+        mobile=request.form.get('mobileno')
+        date_of_joining=request.form.get('doj')
+        date_of_leaving=request.form.get('dol')
+        manager_id=request.form.get('managerid')
+        gender=request.form.get('gender')
+        accrued_leaves=request.form.get("Accleaves")
+        shift_code=request.form.get('shiftcd')
+        dept_no=request.form.get('deptno')
+        emp_type_id=request.form.get('emptypid')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.cr_new_emp({employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{date_of_leaving}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
+        conn.commit()
+        flash("Employee Information created Successully")
+        return redirect('/CreateEmpRecord')
+    return render_template("CreateEmpRecord.html")
 
-@app.route("/personaldata", methods=['GET', 'POST'])
-def personaldata():
-    # if request.method == 'POST':
-    #     employee_id=request.form.get('employee_id')
-    #     fname=request.form.get('fname')
-    #     lname=request.form.get('lname')
-    #     DOB=request.form.get('DOB')
-    #     gender=request.form.get('gender')
-    #     SSN=request.form.get('SSnumber')
-    #     Nationality=request.form.get("nationality")
-    #     job_type=request.form.get('job_title')
-    #     personal_data=db.engine.execute(f"INSERT INTO `personaldata` (`employee_id`,`fname`,`lname`,`DOB`,`gender`,`SSN`,`Nationality`,`job_type`) VALUES ('{employee_id}','{fname}','{lname}','{DOB}','{gender}','{SSN}','{Nationality}','{job_type}')")
-    #     flash("Employee personal Information created Successully")
-    #     return redirect('/CreateEmployee')
-    return render_template("personaldata.html")
+
+@app.route("/CreateEmpPersonaldata", methods=['GET', 'POST'])
+def CreateEmpPersonaldata():
+    if request.method == 'POST':
+        emp_personal_id=request.form.get('emp_pid')
+        empid=request.form.get('empid')
+        marital_status=request.form.get('maritalstat')
+        qualification=request.form.get('qualification')
+        last_employer=request.form.get('lastemployer')
+        last_employer_address=request.form.get('lastempadd')
+        last_employer_contact=request.form.get('lastempcont')
+        previous_role=request.form.get('prevrole')
+        tax_id=request.form.get('taxid')
+        date_of_birth=request.form.get("DOB")
+        nationality=request.form.get("nationality")
+        blood_group=request.form.get('bloddgrp')
+        conn = DatabaseConnection()
+        cur = conn.cursor()    
+        cur.execute(f"Call public.personal_data_emp (`{emp_personal_id}`,`{empid}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,`{last_employer_contact}`,`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
+        conn.commit()
+        flash("Employee personal Information created Successully")
+        return redirect('/CreateEmpPersonaldata')
+    return render_template("CreateEmpPersonaldata.html")
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
 #def editpersonaldata(employee_id):
@@ -253,6 +269,38 @@ def contactdata():
 #         flash("Employee contact Information created Successully")
 #         return redirect('/CreateEmployee')
     return render_template("contactdata.html")
+
+@app.route("/EmployeeDashboard", methods=['GET'])
+def EmployeeDashboard():
+#     if request.method == 'POST':
+#         email=request.form.get('email')
+#         employee_id=request.form.get('employee_id')
+#         address=request.form.get('address')
+#         city=request.form.get('city')
+#         state=request.form.get('state')
+#         plz=request.form.get('plz')
+#         country=request.form.get('country')
+#         phone_number=request.form.get("phone_number")
+#         contact_data=db.engine.execute(f"INSERT INTO `contactdata` (`email`,`employee_id`,`address`,`city`,`state`,`plz`,`country`,`phone_number`) VALUES ('{email}','{employee_id}','{address}','{city}','{state}','{plz}','{country}','{phone_number}')")
+#         flash("Employee contact Information created Successully")
+#         return redirect('/CreateEmployee')
+    return render_template("EmployeeDashboard.html")
+
+@app.route("/HRDashboard", methods=['GET'])
+def HRDashboard():
+#     if request.method == 'POST':
+#         email=request.form.get('email')
+#         employee_id=request.form.get('employee_id')
+#         address=request.form.get('address')
+#         city=request.form.get('city')
+#         state=request.form.get('state')
+#         plz=request.form.get('plz')
+#         country=request.form.get('country')
+#         phone_number=request.form.get("phone_number")
+#         contact_data=db.engine.execute(f"INSERT INTO `contactdata` (`email`,`employee_id`,`address`,`city`,`state`,`plz`,`country`,`phone_number`) VALUES ('{email}','{employee_id}','{address}','{city}','{state}','{plz}','{country}','{phone_number}')")
+#         flash("Employee contact Information created Successully")
+#         return redirect('/CreateEmployee')
+    return render_template("HRDashboard.html")
 
 @app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
 #def editcontactdata(employee_id):
@@ -312,18 +360,18 @@ def financedata():
 #         return redirect('/CreateEmployee')
 #     return render_template("organisationdata.html")
 
-# @app.route('/Leaves', methods=['GET', 'POST'])
-# def Leaves():
-#     leaves_allocated=30
-#     if request.method == 'POST':
-#         employee_id=request.form.get('EmployeeId')
-#         leaves_utilised=request.form.get('leaves_utilised')
-#         leaves_util=int(leaves_utilised)
-#         leaves_remaining=leaves_allocated-leaves_util
-#         leaves_data=db.engine.execute(f"INSERT INTO `leaves` (`employee_id`,`leaves_allocated`,`leaves_utilised`,`leaves_remaining`) VALUES ('{employee_id}','{leaves_allocated}','{leaves_utilised}','{leaves_remaining}')")
-#         flash("Leaves info updated Successully")
-#         return redirect('/CreateEmployee') 
-#     return render_template("leaves.html")
+@app.route('/Leaves', methods=['GET', 'POST'])
+def Leaves():
+    leaves_allocated=30
+    if request.method == 'POST':
+        employee_id=request.form.get('EmployeeId')
+        leaves_utilised=request.form.get('leaves_utilised')
+        leaves_util=int(leaves_utilised)
+        leaves_remaining=leaves_allocated-leaves_util
+        leaves_data=db.engine.execute(f"INSERT INTO `leaves` (`employee_id`,`leaves_allocated`,`leaves_utilised`,`leaves_remaining`) VALUES ('{employee_id}','{leaves_allocated}','{leaves_utilised}','{leaves_remaining}')")
+        flash("Leaves info updated Successully")
+        return redirect('/CreateEmployee') 
+    return render_template("leaves.html")
 
 # @app.route('/Salary', methods=['GET', 'POST'])
 # def Salary():
@@ -400,6 +448,21 @@ def financedata():
 #     flash("all the data deleted successfully")
 #     return redirect("/DisplayEmpInfo") 
 
+@app.route("/EmployeeAppraisal",methods=['POST','GET'])
+def EmployeeAppraisal():
+    if request.method == "POST":
+        Emp_perfomance_id=request.form.get('Emp_perfomance_id')
+        Employee_Id=request.form.get('Employee_id')
+        Emp_rating=request.form.get('Emp_rating')
+        Manager_rating=request.form.get('Manager_rating')
+        Remarks=request.form.get('Remarks')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_appraisal('{Emp_perfomance_id}', '{Employee_Id}', '{Emp_rating}', '{Manager_rating}', '{Remarks}')")
+        conn.commit()
+        flash("Perfomrance Review recorded")
+    return render_template("EmployeeAppraisal.html")
+
 @app.route('/employeelist')
 def employeelist():
     # cur = mysql.connection.cursor()
@@ -415,3 +478,83 @@ def logout():
 
 if __name__ == '__main__':
  app.run(debug=True)
+
+ # class HR_User(UserMixin,db.Model):
+#     userid=db.Column(db.Integer,primary_key=True, autoincrement=True)
+#     username=db.Column(db.String(50), unique= True)
+#     email=db.Column(db.String(50),unique=True)
+#     password=db.Column(db.String(1000))
+#     def get_id(self):
+#            return (self.userid)
+
+
+# class Personaldata(UserMixin,db.Model):
+#     __tablename__='Emp_Personal_Data'
+#     employee_id=db.Column(db.Integer,primary_key=True)
+#     fname=db.Column(db.String(255))
+#     lname=db.Column(db.String(255))
+#     DOB=db.Column(db.String(50),nullable=False)
+#     gender=db.Column(db.String(50))
+#     SSN=db.Column(db.Integer)
+#     Nationality=db.Column(db.String(255))
+#     job_type=db.Column(db.String(255))
+#     def get_eid(self):
+#            return (self.employee_id)
+
+# class Contactdata(db.Model):
+#     __tablename__='contactdata'
+#     email=db.Column(db.String(255),primary_key=True)
+#     employee_id=db.Column(db.Integer)
+#     address=db.Column(db.String(255))
+#     city=db.Column(db.String(255))
+#     state=db.Column(db.String(255))
+#     plz=db.Column(db.Integer)
+#     country=db.Column(db.String(255))
+#     phone_number=db.Column(db.Integer)
+
+# class Skills(db.Model):
+#     __tablename__='skills'
+#     employee_id=db.Column(db.Integer,primary_key=True)
+#     highest_education=db.Column(db.String(255))
+#     skillset=db.Column(db.String(255))
+#     work_exp=db.Column(db.Integer)
+#     wexp_details=db.Column(db.String(255))
+
+# class Financedata(db.Model):
+#     __tablename__='financedata'
+#     employee_id=db.Column(db.Integer)
+#     bankname=db.Column(db.String(255))
+#     iban=db.Column(db.String(255),primary_key=True)
+#     taxid=db.Column(db.Integer)
+
+# class Organisationdata(db.Model):
+#     __tablename__='organisationdata'
+#     employee_id=db.Column(db.Integer,primary_key=True)
+#     department_id=db.Column(db.Integer)
+#     depatment_name=db.Column(db.String(255))
+#     manager_name=db.Column(db.String(255))
+#     office_building=db.Column(db.Integer)
+#     office_location=db.Column(db.String(255))
+#     basecontractor=db.Column(db.String(255))
+#     contractordetails=db.Column(db.String(255))
+
+# class Leaves(db.Model):
+#     __tablename__='leaves'
+#     SNo=db.Column(db.Integer,primary_key=True)
+#     employee_id=db.Column(db.Integer,unique=True)
+#     leaves_allocated=db.Column(db.Integer)
+#     leaves_utilised=db.Column(db.Integer)
+#     leaves_remaining=db.Column(db.Integer)
+
+# class Salary(db.Model):
+#     __tablename__='salary'
+#     salary_id=db.Column(db.Integer,primary_key=True)
+#     employee_id = db.Column(db.Integer,unique=True)
+#     salary=db.Column(db.Integer)
+#     bonus=db.Column(db.Integer)
+#     benefits=db.Column(db.String(255))
+
+# class Equipment(db.Model):
+#     employee_id=db.Column(db.Integer,primary_key=True)
+#     equip_num_data=db.Column(db.String(255))
+#Main Page - Login Page

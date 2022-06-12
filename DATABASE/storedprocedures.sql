@@ -34,3 +34,21 @@ begin
     values (Emp_perfomance_id, Employee_Id, Emp_rating,Manager_rating,Remarks); 
 end;
 $BODY$;
+
+
+-- PROCEDURE: public.sp_create_employeeuser(character varying, character varying, character varying, integer)
+
+-- DROP PROCEDURE IF EXISTS public.sp_create_employeeuser(character varying, character varying, character varying, integer);
+
+CREATE OR REPLACE PROCEDURE public.sp_create_employeeuser(
+	IN username character varying,
+	IN password character varying,
+	IN email character varying,
+	IN empid integer)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+    insert into "Employee_Login" ("username", "email", "password", "Employee_Id")
+    values (username, email, password, empid); 
+end;
+$BODY$;
