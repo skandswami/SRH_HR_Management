@@ -54,6 +54,13 @@ class Employee(db.Model):
     __table__ = Table('Employee_table', Base.metadata,
                     autoload=True, autoload_with=db.engine)
 
+class EmployeeLeaves(db.Model):
+    __table__ = Table('Emp_Leaves', Base.metadata,
+                    autoload=True, autoload_with=db.engine)
+
+class Leaves(db.Model):
+    __table__ = Table('Leaves_table', Base.metadata,
+                    autoload=True, autoload_with=db.engine)
 
 @app.route("/")
 def index():
@@ -328,18 +335,25 @@ def financedata():
 #         return redirect('/CreateEmployee')
 #     return render_template("organisationdata.html")
 
-@app.route('/Leaves', methods=['GET', 'POST'])
-def Leaves():
-    leaves_allocated=30
+@app.route('/LeaveType', methods=['GET', 'POST'])
+def LeaveType():
     if request.method == 'POST':
-        employee_id=request.form.get('EmployeeId')
-        leaves_utilised=request.form.get('leaves_utilised')
-        leaves_util=int(leaves_utilised)
-        leaves_remaining=leaves_allocated-leaves_util
-        leaves_data=db.engine.execute(f"INSERT INTO `leaves` (`employee_id`,`leaves_allocated`,`leaves_utilised`,`leaves_remaining`) VALUES ('{employee_id}','{leaves_allocated}','{leaves_utilised}','{leaves_remaining}')")
-        flash("Leaves info updated Successully")
-        return redirect('/CreateEmployee') 
-    return render_template("leaves.html")
+        leave_Code=request.form.get('leave_code')
+        leaves_description=request.form.get('leaves_description')
+        maximum_leaves_txt = request.form.get('maximum_leaves_txt')
+        maximum_leaves=int(maximum_leaves_txt)
+        leavetype = Leaves.query.filter_by(Leave_code=leave_Code).first()
+        if leavetype:
+            flash("type of leave already exist")
+            return render_template("LeaveType.html")
+        conn = DatabaseConnection()
+        cur = conn.cursor()    
+        cur.execute(f"Call public.add_leave_type('{leave_Code}','{leaves_description}', '{maximum_leaves}')")
+        conn.commit()
+            # leaves_data=db.engine.execute(f"INSERT INTO `leaves` (`employee_id`,`leaves_allocated`,`leaves_utilised`,`leaves_remaining`) VALUES ('{employee_id}','{leaves_allocated}','{leaves_utilised}','{leaves_remaining}')")
+        flash("Successfully created new leave type")
+        return render_template("LeaveType.html")
+    return render_template("LeaveType.html")
 
 # @app.route('/Salary', methods=['GET', 'POST'])
 # def Salary():
