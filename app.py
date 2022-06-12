@@ -115,37 +115,6 @@ def HRReg():
         return render_template("HRLog.html")
     return render_template("HRReg.html")
 
-#################################
-@app.route("/EmployeeAppraisal",methods=['POST','GET'])
-def EmployeeAppraisal():
-    if request.method == "POST":
-        # userid=request.form.get('userid')
-        Emp_perfomance_id=request.form.get('Emp_perfomance_id')
-        Employee_Id=request.form.get('Employee_id')
-        Emp_rating=request.form.get('Emp_rating')
-        Manager_rating=request.form.get('Manager_rating')
-        Remarks=request.form.get('Remarks')
-        #user=HR_User.query.filter_by(email=email).first()
-        #if user:
-            #flash("Email Already exists")
-            #return render_template("HRReg.html")
-        # db.engine.execute('public.sp_create_hruser ?, ?, ?', [username, email, password])
-        # db.engine.execute(f"EXEC `sp_create_hruser`({username}, {email}, {password})")
-        conn = DatabaseConnection()
-        cur = conn.cursor()
-        cur.execute(f"Call public.sp_emp_appraisal('{Emp_perfomance_id}', '{Employee_Id}', '{Emp_rating}', '{Manager_rating}', '{Remarks}')")
-        conn.commit()
-        # newuser = db.engine.execute(f"Call public.sp_create_hruser('{username}', '{password}', '{email}')")
-        # print(str (newuser))
-        # salary_data=db.engine.execute(f"INSERT INTO `salary` (`salary_id`,`employee_id`,`salary`,`bonus`,`benefits`) VALUES ('{salary_id}','{employee_id}','{salary}','{bonus}','{benefits}')")
-        # personal_data=db.engine.execute(f"INSERT INTO public.HR_user ('username','password','email') VALUES ('{username}','{password}','{email}')")
-        # db.engine.execute(f"INSERT INTO HR_user (username, password, email) VALUES ('{username}','{password}','{email}')")
-        flash("Perfomrance Review recorded")
-        #return render_template("HRLog.html")
-    return render_template("EmployeeAppraisal.html")
-
-
-#################################
 @app.route("/main")
 def main():
     return render_template("main.html")
@@ -462,6 +431,22 @@ def EmployeeAppraisal():
         conn.commit()
         flash("Perfomrance Review recorded")
     return render_template("EmployeeAppraisal.html")
+
+@app.route("/EmpAppraisalView",methods=['POST','GET'])
+def EmpAppraisalView():
+    db_data=[('None','None','None','None')]
+    if request.method == "POST":
+        Employee_Id=request.form.get('Employee_Id')
+        print (Employee_Id)
+        if Employee_Id is not None:
+            conn = DatabaseConnection()
+            cur = conn.cursor()
+            cur.execute(f"Call public.sp_emp_appraisal_view('{Employee_Id}', NULL, NULL, NULL, NULL)")
+            db_data = cur.fetchall()
+            print (db_data[0][0])
+            #conn.commit()
+            flash("Performance Review recalled")
+    return render_template("EmpAppraisalView.html", appraisal_data = db_data)
 
 @app.route('/employeelist')
 def employeelist():
