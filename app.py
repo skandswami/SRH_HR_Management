@@ -153,7 +153,7 @@ def EmployeeReg():
         cur = conn.cursor()
         hashpassword = HashFromPassword(password)
         print(hashpassword)
-        cur.execute(f"Call public.sp_create_employeeuser('{username}', '{hashpassword}', '{email}',{employeeId})")
+        cur.execute(f"Call public.sp_create_employeeuser('{username}', '{hashpassword}', '{email}','{employeeId}')")
         conn.commit()
         flash("New user created")
         return render_template("EmployeeLogin.html")
@@ -229,6 +229,26 @@ def CreateEmpPersonaldata():
 #         flash("Personal details updated successfully")
 #         return redirect('/displayinfo')
 #    return render_template("edit.html",post=post)
+
+@app.route("/employeeddetailsedit", methods=['GET', 'POST'])
+def employeedashboard():
+    if request.method == 'POST':
+        Employee_ID=request.form.get('Employee_ID')
+        print(Employee_ID)
+        First_Name=request.form.get('First_Name')
+        Middle_Name=request.form.get('Middle_Name')
+        Last_Name=request.form.get('Last_Name')
+        #DOB=request.form.get('DOB')
+        Gender=request.form.get('Gender')
+        Emp_Type=request.form.get('Emp_Type')
+        conn = DatabaseConnection()
+        cur = conn.cursor()    
+        cur.execute(f"Call public.sp_edit_employee (`{Employee_ID}`,`{First_Name}`,`{Middle_Name}`,`{Last_Name}`,`{Gender}`,`{Emp_Type}`)")
+        conn.commit()
+        #personal_data=db.engine.execute(f"INSERT INTO `Employee_table` (`Employee_ID`,`First_Name`,`Middle_Name`,`Last_Name`,`Gender`,`Emp_Type`) VALUES ('{Employee_ID}','{First_Name}','{Middle_Name}','{Last_Name}','{Gender}','{Emp_Type}')")
+        flash("Successfully Updated User Information")
+        print("Successfully Updated User Information")
+    return render_template("Emp_Details_Editable.html")
 
 @app.route("/contactdata", methods=['GET', 'POST'])
 def contactdata():
