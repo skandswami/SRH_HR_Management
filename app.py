@@ -151,16 +151,38 @@ def EmployeeReg():
         return render_template("EmployeeLogin.html")
     return render_template("EmployeeReg.html")
 
-@app.route('/CreateEmployee')
-def create_employee1():
-    return render_template('CreateEmployee.html')
+# @app.route('/CreateEmpRecord')
+# def create_employee1():
+#     return render_template('CreateEmpRecord.html')
 
-@app.route('/CreateEmpRecord')
+@app.route("/CreateEmpRecord", methods=['GET', 'POST'])
 def create_employee():
-    return render_template('CreateEmpRecord.html')
-    
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        job_id=request.form.get('job_id')
+        first_name=request.form.get('fname')
+        middle_name=request.form.get('mname')
+        last_name=request.form.get('lname')
+        email=request.form.get('empemail')
+        mobile=request.form.get('mobileno')
+        date_of_joining=request.form.get('doj')
+        date_of_leaving=request.form.get('dol')
+        manager_id=request.form.get('managerid')
+        gender=request.form.get('gender')
+        accrued_leaves=request.form.get("Accleaves")
+        shift_code=request.form.get('shiftcd')
+        dept_no=request.form.get('deptno')
+        emp_type_id=request.form.get('emptypid')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.cr_new_emp({employee_id}','{job_id}','{fname}','{mname}','{lname}','{empemail}','{mobileno}','{doj}','{dol}','{managerid}','{gender}','{Accleaves}','{shiftcd}','{deptno}','{emptypid}')")
+        conn.commit()
+        flash("Employee Information created Successully")
+        return redirect('/CreateEmpRecord')
+    return render_template("CreateEmpRecord.html")
 
-@app.route("/personaldata", methods=['GET', 'POST'])
+
+@app.route("/CreateEmpPersonaldata", methods=['GET', 'POST'])
 def personaldata():
     # if request.method == 'POST':
     #     employee_id=request.form.get('employee_id')
@@ -174,7 +196,7 @@ def personaldata():
     #     personal_data=db.engine.execute(f"INSERT INTO `personaldata` (`employee_id`,`fname`,`lname`,`DOB`,`gender`,`SSN`,`Nationality`,`job_type`) VALUES ('{employee_id}','{fname}','{lname}','{DOB}','{gender}','{SSN}','{Nationality}','{job_type}')")
     #     flash("Employee personal Information created Successully")
     #     return redirect('/CreateEmployee')
-    return render_template("personaldata.html")
+    return render_template("CreateEmpPersonaldata.html")
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
 def editpersonaldata(employee_id):
