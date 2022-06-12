@@ -14,6 +14,8 @@ begin
 end;
 $BODY$;
 
+
+
 -- PROCEDURE: public.sp_emp_appraisal(integer,integer,integer,integer,character varying)
 
 DROP PROCEDURE IF EXISTS public.sp_emp_appraisal(integer,integer,integer,integer,character varying);
@@ -62,3 +64,25 @@ begin
     values (leave_code, leave_description, maxleaves); 
 end;
 $BODY$;
+-- PROCEDURE: public.sp_emp_appraisal_view(integer,integer,integer,integer,character varying)
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_appraisal_view(
+	IN Employee_Id integer,
+	OUT Emp_perfomance_id integer,
+	OUT Emp_rating integer,
+    OUT Manager_rating integer,
+    OUT Remarks character varying)
+
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+    select  "Emp_Performance_ID", 
+			"Emp_rating",
+			"Manager_rating",
+			"Remarks"
+	from public."Employee_Performance_table" 
+	INTO Emp_perfomance_id, Emp_rating, Manager_rating, Remarks
+	where "Employee_Performance_table"."Employee_ID"= Employee_Id;
+
+end;
+$BODY$;  

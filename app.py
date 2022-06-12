@@ -29,6 +29,7 @@ def load_user(user_userid):
 
 # postgresql://<username>:<userpassword>@localhost:5433/<databasename>
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:shweta@localhost:5432/HR_Server'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
 
@@ -213,7 +214,7 @@ def CreateEmpPersonaldata():
     return render_template("CreateEmpPersonaldata.html")
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
-def editpersonaldata(employee_id):
+#def editpersonaldata(employee_id):
 #     post=Personaldata.query.filter_by(employee_id=employee_id).first()
 #     if request.method == 'POST':
 #         employee_id=request.form.get('employee_id')
@@ -227,7 +228,7 @@ def editpersonaldata(employee_id):
 #         db.engine.execute(f"UPDATE `personaldata` SET `employee_id` = '{employee_id}', `fname` = '{fname}',`lname` = '{lname}', `DOB` = '{DOB}',`gender` = '{gender}', `SSN` = '{SSN}', `Nationality` = '{Nationality}',`job_type` = '{job_type}' WHERE `personaldata`.`employee_id` = {employee_id}")
 #         flash("Personal details updated successfully")
 #         return redirect('/displayinfo')
-    return render_template("edit.html",post=post)
+#    return render_template("edit.html",post=post)
 
 @app.route("/contactdata", methods=['GET', 'POST'])
 def contactdata():
@@ -278,7 +279,7 @@ def HRDashboard():
     return render_template("HRDashboard.html")
 
 @app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
-def editcontactdata(employee_id):
+#def editcontactdata(employee_id):
 #     posts=Contactdata.query.filter_by(employee_id=employee_id).first()
 #     if request.method == 'POST':
 #         email=request.form.get('email')
@@ -292,7 +293,7 @@ def editcontactdata(employee_id):
 #         db.engine.execute(f"UPDATE `contactdata` SET `email` = '{email}',`employee_id` = '{employee_id}', `address` = '{address}',`city` = '{city}', `state` = '{state}',`plz` = '{plz}', `country` = '{country}', `phone_number` = '{phone_number}' WHERE `contactdata`.`employee_id` = {employee_id}")
 #         flash("Personal details updated successfully")
 #         return redirect('/displayinfo')
-    return render_template("editcontact.html",posts=posts)
+#    return render_template("editcontact.html",posts=posts)
 
 @app.route("/skills", methods=['GET', 'POST'])
 def skills():
@@ -444,6 +445,22 @@ def EmployeeAppraisal():
         conn.commit()
         flash("Perfomrance Review recorded")
     return render_template("EmployeeAppraisal.html")
+
+@app.route("/EmpAppraisalView",methods=['POST','GET'])
+def EmpAppraisalView():
+    db_data=[('None','None','None','None')]
+    if request.method == "POST":
+        Employee_Id=request.form.get('Employee_Id')
+        print (Employee_Id)
+        if Employee_Id is not None:
+            conn = DatabaseConnection()
+            cur = conn.cursor()
+            cur.execute(f"Call public.sp_emp_appraisal_view('{Employee_Id}', NULL, NULL, NULL, NULL)")
+            db_data = cur.fetchall()
+            print (db_data[0][0])
+            #conn.commit()
+            flash("Performance Review recalled")
+    return render_template("EmpAppraisalView.html", appraisal_data = db_data)
 
 @app.route('/employeelist')
 def employeelist():
