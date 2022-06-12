@@ -69,7 +69,7 @@ def HRLog():
         password_check=HR_User.query.filter_by(password=HashFromPassword(password)).first()
         if user and password_check:
             flash("Successful Login")
-            return redirect(url_for("main"))
+            return redirect(url_for("HRDashboard"))
         else:
             flash("Invalid email or password","danger")
             return render_template("HRLog.html")
@@ -84,7 +84,7 @@ def EmployeeLog():
         password_check=EmployeeLogin.query.filter_by(password=HashFromPassword(password)).first()
         if user and password_check:
             flash("Successful Login")
-            return redirect(url_for("Leaves"))
+            return redirect(url_for("EmployeeDashboard"))
         else:
             flash("Invalid email or password","danger")
             return render_template("EmployeeLogin.html")
@@ -237,6 +237,38 @@ def contactdata():
 #         flash("Employee contact Information created Successully")
 #         return redirect('/CreateEmployee')
     return render_template("contactdata.html")
+
+@app.route("/EmployeeDashboard", methods=['GET'])
+def EmployeeDashboard():
+#     if request.method == 'POST':
+#         email=request.form.get('email')
+#         employee_id=request.form.get('employee_id')
+#         address=request.form.get('address')
+#         city=request.form.get('city')
+#         state=request.form.get('state')
+#         plz=request.form.get('plz')
+#         country=request.form.get('country')
+#         phone_number=request.form.get("phone_number")
+#         contact_data=db.engine.execute(f"INSERT INTO `contactdata` (`email`,`employee_id`,`address`,`city`,`state`,`plz`,`country`,`phone_number`) VALUES ('{email}','{employee_id}','{address}','{city}','{state}','{plz}','{country}','{phone_number}')")
+#         flash("Employee contact Information created Successully")
+#         return redirect('/CreateEmployee')
+    return render_template("EmployeeDashboard.html")
+
+@app.route("/HRDashboard", methods=['GET'])
+def HRDashboard():
+#     if request.method == 'POST':
+#         email=request.form.get('email')
+#         employee_id=request.form.get('employee_id')
+#         address=request.form.get('address')
+#         city=request.form.get('city')
+#         state=request.form.get('state')
+#         plz=request.form.get('plz')
+#         country=request.form.get('country')
+#         phone_number=request.form.get("phone_number")
+#         contact_data=db.engine.execute(f"INSERT INTO `contactdata` (`email`,`employee_id`,`address`,`city`,`state`,`plz`,`country`,`phone_number`) VALUES ('{email}','{employee_id}','{address}','{city}','{state}','{plz}','{country}','{phone_number}')")
+#         flash("Employee contact Information created Successully")
+#         return redirect('/CreateEmployee')
+    return render_template("HRDashboard.html")
 
 @app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
 def editcontactdata(employee_id):
