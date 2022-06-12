@@ -27,8 +27,8 @@ login_manager.login_view='HRLogin'
 def load_user(user_userid):
     return HR_User.query.get(int(user_userid))
 
-# postgresql://<username>:<userpassword>@localhost:5433/<databasename>
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5433/HR_SERVER'
+# postgresql://<username>:<userpassword>@localhost:5432/<databasename>
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
 
@@ -166,7 +166,6 @@ def create_employee():
         email=request.form.get('empemail')
         mobile=request.form.get('mobileno')
         date_of_joining=request.form.get('doj')
-        date_of_leaving=request.form.get('dol')
         manager_id=request.form.get('managerid')
         gender=request.form.get('gender')
         accrued_leaves=request.form.get("Accleaves")
@@ -175,7 +174,7 @@ def create_employee():
         emp_type_id=request.form.get('emptypid')
         conn = DatabaseConnection()
         cur = conn.cursor()
-        cur.execute(f"Call public.cr_new_emp({employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{date_of_leaving}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
+        cur.execute(f"Call public.cr_new_emp('{employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
         conn.commit()
         flash("Employee Information created Successully")
         return redirect('/CreateEmpRecord')
