@@ -28,7 +28,7 @@ def load_user(user_userid):
     return HR_User.query.get(int(user_userid))
 
 # postgresql://<username>:<userpassword>@localhost:5433/<databasename>
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5433/HR_SERVER'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://HR_SERVER:HR_SERVER@localhost:5432/HR_SERVER'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db=SQLAlchemy(app)
 
@@ -84,7 +84,7 @@ def EmployeeLog():
         password_check=EmployeeLogin.query.filter_by(password=HashFromPassword(password)).first()
         if user and password_check:
             flash("Successful Login")
-            return redirect(url_for("Leaves.html"))
+            return redirect(url_for("Leaves"))
         else:
             flash("Invalid email or password","danger")
             return render_template("EmployeeLogin.html")
