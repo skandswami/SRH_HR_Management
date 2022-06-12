@@ -175,7 +175,7 @@ def create_employee():
         emp_type_id=request.form.get('emptypid')
         conn = DatabaseConnection()
         cur = conn.cursor()
-        cur.execute(f"Call public.cr_new_emp({employee_id}','{job_id}','{fname}','{mname}','{lname}','{empemail}','{mobileno}','{doj}','{dol}','{managerid}','{gender}','{Accleaves}','{shiftcd}','{deptno}','{emptypid}')")
+        cur.execute(f"Call public.cr_new_emp({employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{date_of_leaving}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
         conn.commit()
         flash("Employee Information created Successully")
         return redirect('/CreateEmpRecord')
@@ -183,19 +183,26 @@ def create_employee():
 
 
 @app.route("/CreateEmpPersonaldata", methods=['GET', 'POST'])
-def personaldata():
-    # if request.method == 'POST':
-    #     employee_id=request.form.get('employee_id')
-    #     fname=request.form.get('fname')
-    #     lname=request.form.get('lname')
-    #     DOB=request.form.get('DOB')
-    #     gender=request.form.get('gender')
-    #     SSN=request.form.get('SSnumber')
-    #     Nationality=request.form.get("nationality")
-    #     job_type=request.form.get('job_title')
-    #     personal_data=db.engine.execute(f"INSERT INTO `personaldata` (`employee_id`,`fname`,`lname`,`DOB`,`gender`,`SSN`,`Nationality`,`job_type`) VALUES ('{employee_id}','{fname}','{lname}','{DOB}','{gender}','{SSN}','{Nationality}','{job_type}')")
-    #     flash("Employee personal Information created Successully")
-    #     return redirect('/CreateEmployee')
+def CreateEmpPersonaldata():
+    if request.method == 'POST':
+        emp_personal_id=request.form.get('emp_pid')
+        empid=request.form.get('empid')
+        marital_status=request.form.get('maritalstat')
+        qualification=request.form.get('qualification')
+        last_employer=request.form.get('lastemployer')
+        last_employer_address=request.form.get('lastempadd')
+        last_employer_contact=request.form.get('lastempcont')
+        previous_role=request.form.get('prevrole')
+        tax_id=request.form.get('taxid')
+        date_of_birth=request.form.get("DOB")
+        nationality=request.form.get("nationality")
+        blood_group=request.form.get('bloddgrp')
+        conn = DatabaseConnection()
+        cur = conn.cursor()    
+        cur.execute(f"Call public.personal_data_emp (`{emp_personal_id}`,`{empid}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,`{last_employer_contact}`,`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
+        conn.commit()
+        flash("Employee personal Information created Successully")
+        return redirect('/CreateEmpPersonaldata')
     return render_template("CreateEmpPersonaldata.html")
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
