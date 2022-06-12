@@ -9,7 +9,7 @@ import psycopg2
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import login_user,logout_user,LoginManager,login_manager
 from flask_login import login_required,current_user
-from sqlalchemy import Table, Column, Integer, ForeignKey,exists
+from sqlalchemy import Table, Column, Integer, ForeignKey, exists
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 import hashlib
@@ -84,7 +84,7 @@ def EmployeeLog():
         password_check=EmployeeLogin.query.filter_by(password=HashFromPassword(password)).first()
         if user and password_check:
             flash("Successful Login")
-            return redirect(url_for("main"))
+            return redirect(url_for("Leaves.html"))
         else:
             flash("Invalid email or password","danger")
             return render_template("EmployeeLogin.html")
@@ -263,18 +263,18 @@ def financedata():
 #         return redirect('/CreateEmployee')
 #     return render_template("organisationdata.html")
 
-# @app.route('/Leaves', methods=['GET', 'POST'])
-# def Leaves():
-#     leaves_allocated=30
-#     if request.method == 'POST':
-#         employee_id=request.form.get('EmployeeId')
-#         leaves_utilised=request.form.get('leaves_utilised')
-#         leaves_util=int(leaves_utilised)
-#         leaves_remaining=leaves_allocated-leaves_util
-#         leaves_data=db.engine.execute(f"INSERT INTO `leaves` (`employee_id`,`leaves_allocated`,`leaves_utilised`,`leaves_remaining`) VALUES ('{employee_id}','{leaves_allocated}','{leaves_utilised}','{leaves_remaining}')")
-#         flash("Leaves info updated Successully")
-#         return redirect('/CreateEmployee') 
-#     return render_template("leaves.html")
+@app.route('/Leaves', methods=['GET', 'POST'])
+def Leaves():
+    leaves_allocated=30
+    if request.method == 'POST':
+        employee_id=request.form.get('EmployeeId')
+        leaves_utilised=request.form.get('leaves_utilised')
+        leaves_util=int(leaves_utilised)
+        leaves_remaining=leaves_allocated-leaves_util
+        leaves_data=db.engine.execute(f"INSERT INTO `leaves` (`employee_id`,`leaves_allocated`,`leaves_utilised`,`leaves_remaining`) VALUES ('{employee_id}','{leaves_allocated}','{leaves_utilised}','{leaves_remaining}')")
+        flash("Leaves info updated Successully")
+        return redirect('/CreateEmployee') 
+    return render_template("leaves.html")
 
 # @app.route('/Salary', methods=['GET', 'POST'])
 # def Salary():
