@@ -17,7 +17,6 @@ Base = declarative_base()
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
-globalEmployeeId = 0
 login_manager=LoginManager(app)
 login_manager.login_view='HRLogin'
 
@@ -90,7 +89,7 @@ def EmployeeLog():
         password_check=EmployeeLogin.query.filter_by(password=HashFromPassword(password)).first()
         if user and password_check:
             flash("Successful Login")
-            globalEmployeeId = user.Employee_Id
+            session['EmployeeId'] = user.Employee_Id
             return redirect(url_for("EmployeeDashboard"))
         else:
             flash("Invalid email or password","danger")
@@ -356,10 +355,11 @@ def EmployeeLeaveApplication():
     if request.method == 'POST':
         leave_date=request.form.get('leave_date')
         leave_Type=request.form.get('leave_type')
+        empId = session['EmployeeId']
         # TODO: Add check for whether the type of leaves aren't aready consumed.
         conn = DatabaseConnection()
         cur = conn.cursor()    
-        cur.execute(f"Call public.apply_leave('{leave_date}','{leave_Type}')")
+        cur.execute(f"Call public.apply_leave('{leave_date}','{leave_Type}','{empId}')")
         conn.commit()
         flash("Leave Successfully applied")
         return render_template("EmployeeLeaveApplication.html")
