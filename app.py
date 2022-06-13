@@ -362,7 +362,7 @@ def EmployeeLeaveApplication():
         cur.execute(f"Call public.apply_leave('{leave_date}','{leave_Type}','{empId}')")
         conn.commit()
         flash("Leave Successfully applied")
-        return render_template("EmployeeLeaveApplication.html")
+        return render_template("EmployeeLeaveApplication.html", data=leave_type)
     return render_template("EmployeeLeaveApplication.html", data=leave_type)
 
 

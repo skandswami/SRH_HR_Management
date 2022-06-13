@@ -108,3 +108,22 @@ begin
 
 end;
 $BODY$;  
+
+-- PROCEDURE: public.add_leave_type(character varying, character varying, integer)
+
+-- DROP PROCEDURE IF EXISTS public.add_leave_type(character varying, character varying, integer);
+
+CREATE OR REPLACE PROCEDURE public.add_leave_type(
+	IN leave_code character varying,
+	IN leave_description character varying,
+	IN maxleaves integer)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+    insert into "Leaves_table" ("Leave_code", "Leave_Type_Desct", "Total_Applicable")
+    values (leave_code, leave_description, maxleaves); 
+end;
+$BODY$;
+ALTER PROCEDURE public.add_leave_type(character varying, character varying, integer)
+    OWNER TO skand;
+
