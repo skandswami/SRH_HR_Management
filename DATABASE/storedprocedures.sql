@@ -230,3 +230,313 @@ ALTER PROCEDURE public.view_empinfo(integer, integer, character varying, charact
     OWNER TO skand;
 
 
+-------------------------------Insert, Update, Delete for Finance Module-------------------------------------
+
+-- PROCEDURE: public.sp_emp_finance_info(integer, integer, integer, text, character varying, character varying, character varying, date, date, integer, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, timestamp without time zone)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_finance_info(integer, integer, integer, text, character varying, character varying, character varying, date, date, integer, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, timestamp without time zone);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_finance_info(
+	IN emp_bank_id integer,
+	IN employee_id integer,
+	IN bank_acc_id integer,
+	IN bank_name text,
+	IN bank_acc_no character varying,
+	IN bank_iban character varying,
+	IN bank_location character varying,
+	IN bank_acc_start_date date,
+	IN bank_acc_end_date date,
+	IN salary_id integer,
+	IN bonus character varying,
+	IN salary_band character varying,
+	IN monthly_salary character varying,
+	IN annual_salary character varying,
+	IN monthly_tax_deduction character varying,
+	IN monthly_insurance_deductions character varying,
+	IN monthly_pension_deductions character varying,
+	IN pf_contribution character varying,
+	IN salary_creation_timestamp timestamp without time zone)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	insert into "Emp_Salary_table" ("Salary_ID",
+    								"Employee_ID",
+    								"Bonus",
+    								"Salary_Band",
+    								"Monthly_Salary",
+    								"Annual_Salary",
+   									"Monthly_Tax _deduction",
+    								"Monthly_Insurance_deductions",
+    								"Monthly_Pension_deductions",
+    								"PF_contribution",
+    								"Salary_creation_timestamp")
+	values (salary_id,
+		    employee_id,
+		    bonus,
+		    salary_band,
+		    monthly_salary,
+		    annual_salary,
+		    monthly_tax_deduction,
+		    monthly_insurance_deductions,
+		    monthly_pension_deductions,
+		    pf_contribution,
+		    salary_creation_timestamp);
+			
+	insert into "Bank_Account_table" ("Bank_acc_ID", 
+									  "Bank_Account_No", 
+									  "Bank_Name", 
+									  "Bank_IBAN", 
+									  "Bank_Location")
+	values (bank_acc_id,
+			bank_acc_no,
+			bank_name,
+			bank_iban,
+			bank_location);
+			
+    insert into  "Emp_Bank_table" ("Emp_Bank_ID", 
+								   "Employee_ID ", 
+								   "Bank_acc_ID", 
+								   "Bank_acc_start_date", 
+								   "Bank_acc_end_date", 
+								   "Salary_ID")
+    values (emp_bank_id,
+			employee_id,
+			bank_acc_id,
+			bank_acc_start_date,
+			bank_acc_end_date,
+			salary_id); 
+end;
+$BODY$;
+
+
+-- PROCEDURE: public.sp_emp_financeinfo_update(integer, date, date, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, timestamp without time zone)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_financeinfo_update(integer, date, date, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, timestamp without time zone);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_financeinfo_update(
+	IN employee_id integer,
+	IN bank_acc_start_date date,
+	IN bank_acc_end_date date,
+	IN bonus character varying,
+	IN salary_band character varying,
+	IN monthly_salary character varying,
+	IN annual_salary character varying,
+	IN monthly_tax_deduction character varying,
+	IN monthly_insurance_deductions character varying,
+	IN monthly_pension_deductions character varying,
+	IN pf_contribution character varying,
+	IN salary_creation_timestamp timestamp without time zone)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+   
+	update "Emp_Salary_table" 
+	set
+	"Bonus"=bonus, 
+	"Salary_Band"=salary_band, 
+	"Monthly_Salary"=monthly_salary, 
+	"Annual_Salary"=annual_salary, 
+	"Monthly_Tax _deduction"=monthly_tax_deduction,
+	"Monthly_Insurance_deductions"=monthly_insurance_deductions,
+	"Monthly_Pension_deductions"=monthly_pension_deductions,
+	"PF_contribution"=pf_contribution,
+	"Salary_creation_timestamp"=salary_creation_timestamp
+    where "Employee_ID"=employee_id;
+	
+	update "Emp_Bank_table" 
+	set 
+	"Bank_acc_start_date"=bank_acc_start_date, 
+	"Bank_acc_end_date"=bank_acc_end_date,
+	"Salary_ID"=(select "Salary_ID" from "Emp_Salary_table" where 
+				"Emp_Salary_table"."Employee_ID"=employee_id)
+    where "Employee_ID "=employee_id;
+end;
+$BODY$;
+
+
+-- PROCEDURE: public.sp_emp_finance_delete(integer, integer, integer)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_finance_delete(integer, integer, integer);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_finance_delete(
+	IN employee_id integer,
+	INOUT val1 integer DEFAULT NULL::integer,
+	INOUT val2 integer DEFAULT NULL::integer)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	select "Bank_acc_ID" from "Emp_Bank_table" where "Employee_ID " = employee_id
+	into val1;
+	select "Salary_ID" from "Emp_Bank_table" where "Employee_ID " = employee_id
+	into val2;
+	delete from "Emp_Bank_table" where "Employee_ID " = employee_id;
+	delete from "Bank_Account_table" where "Bank_acc_ID" = val1 ;
+	delete from "Emp_Salary_table" where "Salary_ID" = val2 ;
+	
+end;
+$BODY$;
+
+-------------------------------Insert, Update, Delete for Department Module-------------------------------------
+
+-- PROCEDURE: public.sp_emp_dept(integer, integer, integer, date, date)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_dept(integer, integer, integer, date, date);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_dept(
+	IN emp_dept_id integer,
+	IN dept_no integer,
+	IN employee_id integer,
+	IN emp_dept_joining_date date,
+	IN emp_dept_leaving_date date)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+
+    insert into  "Emp_Dept_table" ("Emp_Dept_ID",
+    "Dept_no.",
+    "Employee_ID",
+    "Emp_dept_joining_date",
+    "Emp_dept_leaving_date")
+    values (emp_dept_id,
+	dept_no,
+	employee_id,
+	emp_dept_joining_date,
+	emp_dept_leaving_date); 
+end;
+$BODY$;
+
+-- PROCEDURE: public.sp_emp_dept_update(integer, integer, date, date)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_dept_update(integer, integer, date, date);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_dept_update(
+	IN dept_no integer,
+	IN employee_id integer,
+	IN emp_dept_joining_date date,
+	IN emp_dept_leaving_date date)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+
+    update  "Emp_Dept_table" 
+	set
+	"Dept_no."=dept_no,
+    "Employee_ID"=employee_id,
+    "Emp_dept_joining_date"=emp_dept_joining_date,
+    "Emp_dept_leaving_date"=emp_dept_leaving_date
+	where "Employee_ID"=employee_id;
+	end;
+$BODY$;
+
+-- PROCEDURE: public.sp_emp_dept_delete(integer)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_dept_delete(integer);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_dept_delete(
+	IN employee_id integer)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	delete from "Emp_Dept_table" where "Employee_ID" = employee_id;
+end;
+$BODY$;
+
+-------------------------------Insert, Update, Delete for Job Module-------------------------------------
+
+-- PROCEDURE: public.sp_emp_job(integer, integer, integer, timestamp without time zone, date, text, integer, text, date, date)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_job(integer, integer, integer, timestamp without time zone, date, text, integer, text, date, date);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_job(
+	IN job_emp_id integer,
+	IN employee_id integer,
+	IN job_id integer,
+	IN job_creation_timestamp timestamp without time zone,
+	IN job_updated_on date,
+	IN job_description text,
+	IN dept_no integer,
+	IN active_inactive text,
+	IN job_start_date date,
+	IN job_end_date date)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	insert into  "Job_table" ("Job_ID",
+    "Job_creation_timestamp",
+    "Job_updated_on",
+    "Job_description",
+    "Dept_no.",
+    "Active/Inactive")
+    values (job_id,
+    job_creation_timestamp,
+    job_updated_on,
+    Job_description,
+    dept_no,
+    active_inactive);
+
+    insert into  "Emp_Job_table" ("Job_emp_ID",
+    "Employee_ID",
+    "Job_ID",
+    "Job_start_date",
+    "Job_end_date")
+    values (job_emp_id,
+	employee_id,
+	job_id,
+	job_start_date,
+	job_end_date); 
+end;
+$BODY$;
+
+-- PROCEDURE: public.sp_emp_job_update(integer, timestamp without time zone, date, text, integer, text, date, date)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_job_update(integer, timestamp without time zone, date, text, integer, text, date, date);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_job_update(
+	IN employee_id integer,
+	IN job_creation_timestamp timestamp without time zone,
+	IN job_updated_on date,
+	IN job_description text,
+	IN dept_no integer,
+	IN active_inactive text,
+	IN job_start_date date,
+	IN job_end_date date)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+   
+	update "Job_table" 
+	set
+    "Job_creation_timestamp" = job_creation_timestamp,
+    "Job_updated_on" = job_updated_on,
+    "Job_description" = job_description,
+    "Dept_no." = dept_no,
+    "Active/Inactive" = active_inactive
+    where "Job_ID" = (select "Job_ID" from "Emp_Job_table" where "Employee_ID" = employee_id);
+	
+	update "Emp_Job_table" 
+	set 
+    "Job_start_date" = job_start_date,
+    "Job_end_date" = job_end_date
+    where "Employee_ID"=employee_id;
+end;
+$BODY$;
+
+-- PROCEDURE: public.sp_emp_job_delete(integer, integer)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_job_delete(integer, integer);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_job_delete(
+	IN employee_id integer,
+	INOUT val1 integer DEFAULT NULL::integer)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	select "Job_ID" from "Emp_Job_table" where "Employee_ID" = employee_id
+	into val1;
+	delete from "Emp_Job_table" where "Employee_ID" = employee_id;
+	delete from "Job_table" where "Job_ID" = val1;
+end
+$BODY$;
+
+
+
