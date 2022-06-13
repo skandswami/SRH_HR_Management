@@ -268,8 +268,8 @@ def skills():
 #         return redirect('/CreateEmployee')
     return render_template("skills.html")
 
-@app.route("/financedata", methods=['GET', 'POST'])
-def financedata():
+@app.route("/CreateFinanceData", methods=['GET', 'POST'])
+def createFinanceData():
     if request.method == 'POST':
         emp_bank_id=request.form.get('emp_bank_id')
         employee_id=request.form.get('employee_id')
@@ -281,16 +281,95 @@ def financedata():
         bank_location=request.form.get('bank_location')
         start_date=request.form.get('start_date')
         end_date=request.form.get('end_date')
+        bonus=request.form.get('bonus')
+        salary_band=request.form.get('salary_band')
+        monthly_salary=request.form.get('monthly_salary')
+        annual_salary=request.form.get('annual_salary')
+        monthly_tax_deduction=request.form.get('monthly_tax_deduction')
+        monthly_insurance_deduction=request.form.get('monthly_insurance_deduction')
+        monthly_pension_deduction=request.form.get('monthly_pension_deduction')
+        pf=request.form.get('pf')
+        salary_creation_timestamp=request.form.get('salary_creation_timestamp')
         conn = DatabaseConnection()
         cur = conn.cursor()
-        cur.execute(f"Call public.sp_emp_bank_info('{emp_bank_id}', '{employee_id}', '{bank_acc_id}', '{bank_name}', '{bank_acc_number}', '{bank_iban}', '{bank_location}', '{start_date}', '{end_date}', '{salary_id}')")
+        cur.execute(f"Call public.sp_emp_bank_info('{emp_bank_id}', '{employee_id}', '{bank_acc_id}', '{bank_name}', '{bank_acc_number}', '{bank_iban}', '{bank_location}', '{start_date}', '{end_date}', '{salary_id}', '{bonus}', '{salary_band}', '{monthly_salary}', '{annual_salary}', '{monthly_tax_deduction}', '{monthly_insurance_deduction}', '{monthly_pension_deduction}', '{pf}', '{salary_creation_timestamp}')")
         conn.commit()
         flash("Employee finance Information created Successully")
-        return redirect('/CreateEmployee')
-    return render_template("financedata.html")
+        return redirect('/CreateFinanceData')
+    return render_template("CreateFinanceData.html")
 
-@app.route("/organisationdata", methods=['GET', 'POST'])
-def organisationdata():
+@app.route("/UpdateFinanceData", methods=['GET', 'POST'])
+def updateFinanceData():
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        start_date=request.form.get('start_date')
+        end_date=request.form.get('end_date')
+        bonus=request.form.get('bonus')
+        salary_band=request.form.get('salary_band')
+        monthly_salary=request.form.get('monthly_salary')
+        annual_salary=request.form.get('annual_salary')
+        monthly_tax_deduction=request.form.get('monthly_tax_deduction')
+        monthly_insurance_deduction=request.form.get('monthly_insurance_deduction')
+        monthly_pension_deduction=request.form.get('monthly_pension_deduction')
+        pf=request.form.get('pf')
+        salary_creation_timestamp=request.form.get('salary_creation_timestamp')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_bankinfo_update('{employee_id}', '{start_date}', '{end_date}', '{bonus}', '{salary_band}', '{monthly_salary}', '{annual_salary}', '{monthly_tax_deduction}', '{monthly_insurance_deduction}', '{monthly_pension_deduction}', '{pf}', '{salary_creation_timestamp}')")
+        conn.commit()
+        flash("Employee finance Information Updated Successully")
+        return redirect('/UpdateFinanceData')
+    return render_template("UpdateFinanceData.html")
+
+@app.route("/DeleteFinanceData", methods=['GET', 'POST'])
+def deleteFinancedata():
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_finance_delete('{employee_id}')")
+        conn.commit()
+        flash("Employee Department Information Successfully Deleted")
+        return redirect('/DeleteFinanceData')
+    return render_template("DeleteFinanceData.html")
+
+@app.route("/DisplayDeptData",methods=['POST','GET'])
+def displayDeptData():
+    db_data=[('','','','','','')]
+    if request.method == "POST":
+        employee_id=request.form.get('employee_id')
+        if employee_id is not None:
+            conn = DatabaseConnection()
+            cur = conn.cursor()
+            cur.execute(f"Call public.sp_emp_dept_view('{employee_id}', NULL, NULL, NULL, NULL, NULL, NULL)")
+            db_data = cur.fetchall()
+            print (db_data[0][0])
+            #conn.commit()
+            flash("Performance Review recalled")
+    return render_template("DisplayDeptData.html", dept_data = db_data)
+
+# @app.route("/DisplayDeptData",methods=['POST','GET'])
+# def displayDeptData():
+#     db_data=[('','','','','','','')]
+#     if request.method == "POST":
+#         conn = DatabaseConnection()
+#         employee_id="select Employee_ID from Emp_Dept_table"
+#         dept_no="select Dept_no. from Emp_Dept_table"
+#         dept_name="select Dept_Name from Department_table"
+#         dept_contact_no="select Dept_contact_no from Department_table"
+#         join_date="select Emp_dept_joining_date from Emp_Dept_table"
+#         leave_date="select Emp_dept_leaving_date from Emp_Dept_table"
+#         timestamp="select Creation_Timestamp from Department_table"
+#         cur = conn.cursor()
+#         cur.execute(f"Call public.sp_emp_dept_view('{employee_id}', '{dept_no}', '{dept_name}', '{dept_contact_no}', '{join_date}', '{leave_date}', '{timestamp}')")
+#         db_data = cur.fetchall()
+#         print (db_data[0][0])
+#         #conn.commit()
+#         flash("Performance Review recalled")
+#     return render_template("DisplayDeptData.html", dept_data = db_data)
+
+@app.route("/CreateDeptData", methods=['GET', 'POST'])
+def createDeptData():
     if request.method == 'POST':
         emp_dept_id=request.form.get('emp_dept_id')
         employee_id=request.form.get('employee_id')
@@ -301,9 +380,88 @@ def organisationdata():
         cur = conn.cursor()
         cur.execute(f"Call public.sp_emp_dept('{emp_dept_id}', '{department_id}', '{employee_id}', '{join_date}', '{leave_date}')")
         conn.commit()
-        flash("Employee organisation Information created Successully")
-        return redirect('/CreateEmployee')
-    return render_template("organisationdata.html")
+        flash("Employee Department Information Successfully Created")
+        return redirect('/CreateDeptData')
+    return render_template("CreateDeptData.html")
+
+@app.route("/UpdateDeptData", methods=['GET', 'POST'])
+def updateDeptdata():
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        department_id=request.form.get('deptid')
+        join_date=request.form.get('join_date')
+        leave_date=request.form.get('leave_date')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_dept_update('{department_id}', '{employee_id}', '{join_date}', '{leave_date}')")
+        conn.commit()
+        flash("Employee Department Information Successfully Updated")
+        return redirect('/UpdateDeptData')
+    return render_template("UpdateDeptData.html")
+
+@app.route("/DeleteDeptData", methods=['GET', 'POST'])
+def deleteDeptdata():
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_dept_delete('{employee_id}')")
+        conn.commit()
+        flash("Employee Department Information Successfully Deleted")
+        return redirect('/DeleteDeptData')
+    return render_template("DeleteDeptData.html")
+
+@app.route("/CreateJob", methods=['GET', 'POST'])
+def createJob():
+    if request.method == 'POST':
+        job_emp_id=request.form.get('job_emp_id')
+        employee_id=request.form.get('employee_id')
+        job_id=request.form.get('job_id')
+        job_creation_timestamp=request.form.get('job_creation_timestamp')
+        job_update=request.form.get('job_update')
+        job_description=request.form.get('job_description')
+        dep_id=request.form.get('dep_id')
+        activity_status=request.form.get('activity_status')
+        start_date=request.form.get('start_date')
+        end_date=request.form.get('end_date')        
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_job('{job_emp_id}', '{employee_id}', '{job_id}', '{job_creation_timestamp}', '{job_update}', '{job_description}', '{dep_id}', '{activity_status}', '{start_date}', '{end_date}')")
+        conn.commit()
+        flash("Job Details Successfully Added")
+        return redirect('/CreateJob')
+    return render_template("CreateJob.html")
+
+@app.route("/UpdateJob", methods=['GET', 'POST'])
+def updateJob():
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        job_creation_timestamp=request.form.get('job_creation_timestamp')
+        job_update=request.form.get('job_update')
+        job_description=request.form.get('job_description')
+        dep_id=request.form.get('dep_id')
+        activity_status=request.form.get('activity_status')
+        start_date=request.form.get('start_date')
+        end_date=request.form.get('end_date')        
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_job_update('{employee_id}', '{job_creation_timestamp}', '{job_update}', '{job_description}', '{dep_id}', '{activity_status}', '{start_date}', '{end_date}')")
+        conn.commit()
+        flash("Job Details Successfully Updated")
+        return redirect('/UpdateJob')
+    return render_template("UpdateJob.html")
+
+@app.route("/DeleteJobData", methods=['GET', 'POST'])
+def deleteJob():
+    if request.method == 'POST':
+        employee_id=request.form.get('employee_id')
+        conn = DatabaseConnection()
+        cur = conn.cursor()
+        cur.execute(f"Call public.sp_emp_job_delete('{employee_id}')")
+        conn.commit()
+        flash("Employee Department Information Successfully Deleted")
+        return redirect('/DeleteJobData')
+    return render_template("DeleteJobData.html")
 
 @app.route('/Leaves', methods=['GET', 'POST'])
 def Leaves():
