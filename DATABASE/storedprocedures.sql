@@ -127,3 +127,108 @@ $BODY$;
 ALTER PROCEDURE public.add_leave_type(character varying, character varying, integer)
     OWNER TO skand;
 
+-- PROCEDURE: public.view_empinfo(integer, integer, character varying, character varying, character varying, character varying, character varying, date, integer, character varying, integer, integer, integer, integer, character varying, character varying, character varying, integer, character varying, character varying, date, character varying, character varying, character varying, integer, character varying, integer, character varying)
+
+-- DROP PROCEDURE IF EXISTS public.view_empinfo(integer, integer, character varying, character varying, character varying, character varying, character varying, date, integer, character varying, integer, integer, integer, integer, character varying, character varying, character varying, integer, character varying, character varying, date, character varying, character varying, character varying, integer, character varying, integer, character varying);
+
+CREATE OR REPLACE PROCEDURE public.view_empinfo(
+	INOUT employee_id integer DEFAULT NULL::integer,
+	INOUT job_id integer DEFAULT NULL::integer,
+	INOUT first_name character varying DEFAULT NULL::character varying,
+	INOUT middle_name character varying DEFAULT NULL::character varying,
+	INOUT last_name character varying DEFAULT NULL::character varying,
+	INOUT email character varying DEFAULT NULL::character varying,
+	INOUT mobile character varying DEFAULT NULL::character varying,
+	INOUT date_of_joining date DEFAULT NULL::date,
+	INOUT manager_id integer DEFAULT NULL::integer,
+	INOUT gender character varying DEFAULT NULL::character varying,
+	INOUT accrued_leaves integer DEFAULT NULL::integer,
+	INOUT shift_code integer DEFAULT NULL::integer,
+	INOUT dept_no integer DEFAULT NULL::integer,
+	INOUT emp_type_id integer DEFAULT NULL::integer,
+	INOUT marital_status character varying DEFAULT NULL::character varying,
+	INOUT qualification character varying DEFAULT NULL::character varying,
+	INOUT last_employer_address character varying DEFAULT NULL::character varying,
+	INOUT last_employer_contact integer DEFAULT NULL::integer,
+	INOUT previous_role character varying DEFAULT NULL::character varying,
+	INOUT tax_id character varying DEFAULT NULL::character varying,
+	INOUT date_of_birth date DEFAULT NULL::date,
+	INOUT nationality character varying DEFAULT NULL::character varying,
+	INOUT blood_group character varying DEFAULT NULL::character varying,
+	INOUT addr1_street_name character varying DEFAULT NULL::character varying,
+	INOUT addr1_house_no integer DEFAULT NULL::integer,
+	INOUT addr1_city character varying DEFAULT NULL::character varying,
+	INOUT postcode integer DEFAULT NULL::integer,
+	INOUT country character varying DEFAULT NULL::character varying)
+LANGUAGE 'plpgsql'
+AS $BODY$
+BEGIN
+SELECT emp."Employee_ID",
+emp."Job_ID",
+emp."First_Name",
+emp."Middle_Name",
+emp."Last_Name",
+emp."Email",
+emp."Mobile",
+emp."Date_of_joining",
+emp."Manager_ID",
+emp."Gender",
+emp."Accrued_leaves",
+emp."Shift_code",
+emp."Emp_Type_ID ",
+per."Marital_status",
+per."Qualification",
+per."Last_employer_address",
+per."Last_employer_contact",
+per."Previous_role",
+per."Tax_ID",per."Date_of_birth",
+per."Nationality",
+per."Blood_group",
+addr."Addr1_Street_Name",
+addr."Addr1_House_No",
+addr."Addr1_City",
+addr."Addr1_Postcode",
+addr."Addr1_Country"
+
+INTO
+employee_id,
+job_id,
+first_name,
+middle_name,
+last_name,
+email,
+mobile,
+date_of_joining,
+manager_ID,
+gender,
+accrued_leaves,
+shift_code,
+emp_type_id,
+marital_status,
+qualification,
+last_employer_address,
+last_employer_contact,
+previous_role,
+tax_ID,
+date_of_birth,
+nationality,
+blood_group,
+addr1_street_name,
+addr1_house_no,
+addr1_city,
+postcode,
+country
+
+FROM public."Employee_table" as emp,
+public."Employee_Personal_table" as per,
+public."Emp_address_table" as addr
+
+WHERE emp."Employee_ID" = per."Employee_ID"
+AND emp."Employee_ID" = addr."Employee_ID";
+
+END;
+$BODY$;
+ALTER PROCEDURE public.view_empinfo(integer, integer, character varying, character varying, character varying, character varying, character varying, date, integer, character varying, integer, integer, integer, integer, character varying, character varying, character varying, integer, character varying, character varying, date, character varying, character varying, character varying, integer, character varying, integer, character varying)
+    OWNER TO skand;
+
+

@@ -263,7 +263,7 @@ def EmployeeDashboard():
 def HRDashboard():
     return render_template("HRDashboard.html")
 
-@app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
+#@app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
 #def editcontactdata(employee_id):
 #     posts=Contactdata.query.filter_by(employee_id=employee_id).first()
 #     if request.method == 'POST':
@@ -386,10 +386,10 @@ def EmployeeLeaveApplication():
 def DisplayEmpInfo():
     if request.method == 'POST':
         empid=request.form.get('empid')
-        exists = Employee.query.filter_by(employee_id=empid).first()
+        exists = Employee.query.filter_by(Employee_ID=empid).first()
         if exists:
-            session ['empid'] = empid
-            return redirect(url_for("DisplayEmpInfo"))
+            # session ['empid'] = empid
+            return redirect(url_for("displayinfo"))
         else:
             flash("eid doesnot exist")
         return redirect('/DisplayEmpInfo') 
@@ -397,6 +397,11 @@ def DisplayEmpInfo():
 
 @app.route('/displayinfo')
 def displayinfo():
+    conn = DatabaseConnection()
+    cur = conn.cursor()
+    cur.execute(f"Call public.view_empinfo()")
+    employeelist=cur.fetchall()
+    conn.commit()
 # #     cur = mysql.connection.cursor()
 # #     eid=session.get('eid', None)
 # #     cur.execute("""SELECT * FROM personaldata WHERE employee_id='%s' """ %(eid))
@@ -415,7 +420,7 @@ def displayinfo():
 # #     emp_leaves=cur.fetchall()
 # #     cur.execute("""SELECT * FROM equipment WHERE employee_id='%s' """ %(eid))
 # #     emp_equipment=cur.fetchall()
-        return render_template("displayinfo.html")
+    return render_template("displayinfo.html", emps = employeelist)
         # ,emps=emps,emp_skill=emp_skill,
         # emp_contact=emp_contact,emp_finance=emp_finance,emp_organisation=emp_organisation,
         # emp_salary=emp_salary,emp_leaves=emp_leaves,emp_equipment=emp_equipment)
@@ -465,99 +470,9 @@ def EmpAppraisalView():
             flash("Performance Review recalled")
     return render_template("EmpAppraisalView.html", appraisal_data = db_data)
 
-@app.route('/employeelist')
-def employeelist():
-    eid=session.get('eid', None)
-    conn = DatabaseConnection()
-    cur = conn.cursor()
-    # emps = cur.execute(f"Call public.sp_emp_appraisal('{Emp_perfomance_id}', '{Employee_Id}', '{Emp_rating}', '{Manager_rating}', '{Remarks}')")
-    conn.commit()
-    cur.execute("""SELECT * FROM personaldata""")
-    emps=cur.fetchall()
-    return render_template("employeelist.html",emps)
 @app.route('/logout')
 def logout():
     return render_template("index.html")
 
 if __name__ == '__main__':
  app.run(debug=True)
-
- # class HR_User(UserMixin,db.Model):
-#     userid=db.Column(db.Integer,primary_key=True, autoincrement=True)
-#     username=db.Column(db.String(50), unique= True)
-#     email=db.Column(db.String(50),unique=True)
-#     password=db.Column(db.String(1000))
-#     def get_id(self):
-#            return (self.userid)
-
-
-# class Personaldata(UserMixin,db.Model):
-#     __tablename__='Emp_Personal_Data'
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     fname=db.Column(db.String(255))
-#     lname=db.Column(db.String(255))
-#     DOB=db.Column(db.String(50),nullable=False)
-#     gender=db.Column(db.String(50))
-#     SSN=db.Column(db.Integer)
-#     Nationality=db.Column(db.String(255))
-#     job_type=db.Column(db.String(255))
-#     def get_eid(self):
-#            return (self.employee_id)
-
-# class Contactdata(db.Model):
-#     __tablename__='contactdata'
-#     email=db.Column(db.String(255),primary_key=True)
-#     employee_id=db.Column(db.Integer)
-#     address=db.Column(db.String(255))
-#     city=db.Column(db.String(255))
-#     state=db.Column(db.String(255))
-#     plz=db.Column(db.Integer)
-#     country=db.Column(db.String(255))
-#     phone_number=db.Column(db.Integer)
-
-# class Skills(db.Model):
-#     __tablename__='skills'
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     highest_education=db.Column(db.String(255))
-#     skillset=db.Column(db.String(255))
-#     work_exp=db.Column(db.Integer)
-#     wexp_details=db.Column(db.String(255))
-
-# class Financedata(db.Model):
-#     __tablename__='financedata'
-#     employee_id=db.Column(db.Integer)
-#     bankname=db.Column(db.String(255))
-#     iban=db.Column(db.String(255),primary_key=True)
-#     taxid=db.Column(db.Integer)
-
-# class Organisationdata(db.Model):
-#     __tablename__='organisationdata'
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     department_id=db.Column(db.Integer)
-#     depatment_name=db.Column(db.String(255))
-#     manager_name=db.Column(db.String(255))
-#     office_building=db.Column(db.Integer)
-#     office_location=db.Column(db.String(255))
-#     basecontractor=db.Column(db.String(255))
-#     contractordetails=db.Column(db.String(255))
-
-# class Leaves(db.Model):
-#     __tablename__='leaves'
-#     SNo=db.Column(db.Integer,primary_key=True)
-#     employee_id=db.Column(db.Integer,unique=True)
-#     leaves_allocated=db.Column(db.Integer)
-#     leaves_utilised=db.Column(db.Integer)
-#     leaves_remaining=db.Column(db.Integer)
-
-# class Salary(db.Model):
-#     __tablename__='salary'
-#     salary_id=db.Column(db.Integer,primary_key=True)
-#     employee_id = db.Column(db.Integer,unique=True)
-#     salary=db.Column(db.Integer)
-#     bonus=db.Column(db.Integer)
-#     benefits=db.Column(db.String(255))
-
-# class Equipment(db.Model):
-#     employee_id=db.Column(db.Integer,primary_key=True)
-#     equip_num_data=db.Column(db.String(255))
-#Main Page - Login Page

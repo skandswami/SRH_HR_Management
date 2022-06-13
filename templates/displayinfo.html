@@ -84,15 +84,6 @@
   <h2>HR Management System</h2>
 </header>
 <section>
-
-  <nav>
-    <ul>
-      <li><a href="CreateEmployee" style="background-color:green;">Add Employee</a></li>
-      <li><a href="DisplayEmpInfo" style="background-color:fuchsia;">Employee Details</a></li>
-      <li><a href="employeelist" style="background-color:grey;">Employee List</a></li>
-      <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
-    </ul>
-  </nav> 
   
   <article>
     {% with messages = get_flashed_messages() %}
@@ -115,14 +106,20 @@
           <thead>
             <tr>
               <th>Employee ID</th>
+              <th>Job Id</th>
               <th>First name</th>
+              <th>Middle name</th>
               <th>Last name</th>
-              <th>DOB</th>
-              <th>gender</th>
-              <th>SSN</th>
-              <th>Nationality</th>
-              <th>job type</th>
-              <th>Edit</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Date of joining</th>
+              <th>Manager Id</th>
+              <th>Gender</th>
+              <th>Accured Leaves</th>
+              <th>Shift Code</th>
+              <th>Dept No.</th>
+              <th>Emp Type Id</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -136,117 +133,65 @@
               <td>{{emp[5]}}</td>
               <td>{{emp[6]}}</td>
               <td>{{emp[7]}}</td>
+              <td>{{emp[8]}}</td>
+              <td>{{emp[9]}}</td>
+              <td>{{emp[10]}}</td>
+              <td>{{emp[11]}}</td>
+              <td>{{emp[12]}}</td>
+              <td>{{emp[13]}}</td>
               <td><a href="/edit/{{emp[0]}}"><button class="btn btn-primary">Edit</button></td>
             </tr>
                 {% endfor %}
           </tbody>
           <thead>
             <tr>
-              <th>Education</th>
-              <th>skills</th>
-              <th>Work Experience</th>
-              <th>Work Experience details</th>
+               <th>Marital Status</th>
+              <th>Qualification</th>
+              <th>Last Employer Address</th>
+              <th>Last Employer Contact</th>
+              <th>Previous Role</th>
+              <th>Tax Id</th>
+              <th>DOB</th>
+              <th>Nationality</th>
+              <th>Blood Group</th>
             </tr>
           </thead>
           <tbody>
-              {% for skill in emp_skill %}
+              {% for item in emps %}
             <tr>
-              <td>{{skill[1]}}</td>
-              <td>{{skill[2]}}</td>
-              <td>{{skill[3]}}</td>
-              <td>{{skill[4]}}</td>
+              <td>{{item[14]}}</td>
+              <td>{{item[15]}}</td>
+              <td>{{item[16]}}</td>
+              <td>{{item[17]}}</td>
+              <td>{{item[18]}}</td>
+              <td>{{item[19]}}</td>
+              <td>{{item[20]}}</td>
+              <td>{{item[21]}}</td>
+              <td>{{item[22]}}</td>
+              <td><a href="/editPersonalInfo/{{item[0]}}"><button class="btn btn-primary">Edit</button></td>
+
             </tr>
                 {% endfor %}
           </tbody>
           <thead>
             <tr>
-              <th>Email Id</th>
-              <th>Address</th>
+              <th>Street Name</th>
+              <th>House No.</th>
               <th>City</th>
-              <th>State</th>
               <th>PLZ</th>
               <th>Country</th>
-              <th>Phone Number</th>
-              <th>Edit</th>
             </tr>
           </thead>
           <tbody>
-              {% for contact in emp_contact %}
+              {% for item in emps %}
             <tr>
-              <td>{{contact[0]}}</td>
-              <td>{{contact[2]}}</td>
-              <td>{{contact[3]}}</td>
-              <td>{{contact[4]}}</td>
-              <td>{{contact[5]}}</td>
-              <td>{{contact[6]}}</td>
-              <td>{{contact[7]}}</td>
-              <td><a href="/editcontact/{{contact[1]}}"><button class="btn btn-primary">Edit</button></td>
-            </tr>
-                {% endfor %}
-          </tbody>
-          <thead>
-            <tr>
-              <th>Bank Name</th>
-              <th>IBAN Number</th>
-              <th>Tax ID</th>
-            </tr>
-          </thead>
-          <tbody>
-              {% for finance in emp_finance %}
-            <tr>
-              <td>{{finance[1]}}</td>
-              <td>{{finance[2]}}</td>
-              <td>{{finance[3]}}</td>
-            </tr>
-                {% endfor %}
-          </tbody>
-          <thead>
-            <tr>
-              <th>Department ID</th>
-              <th>Department Name</th>
-              <th>Manager Name</th>
-              <th>Office Building</th>
-              <th>Office Location</th>
-              <th>Equipment Details</th>
-            </tr>
-          </thead>
-          <tbody>
-              {% for org in emp_organisation %}
-              {% for equ in emp_equipment %}
-            <tr>
-              <td>{{org[1]}}</td>
-              <td>{{org[2]}}</td>
-              <td>{{org[3]}}</td>
-              <td>{{org[4]}}</td>
-              <td>{{org[5]}}</td>
-              <td>{{equ[1]}}</td>
-            </tr>
-                {% endfor %}
-                {% endfor %}
-          </tbody>
-          <thead>
-            <tr>
-              <th>Salary ID</th>
-              <th>Salary</th>
-              <th>Bonus</th>
-              <th>Benefits</th>
-              <th>Leaves Utilised</th>
-              <th>Leaves Remaining</th>
-  
-            </tr>
-          </thead>
-          <tbody>
-              {% for salary in emp_salary %}
-              {% for leaves in emp_leaves %}
-            <tr>
-              <td>{{salary[0]}}</td>
-              <td>{{salary[2]}}</td>
-              <td>{{salary[3]}}</td>
-              <td>{{salary[4]}}</td>
-              <td>{{leaves[3]}}</td>
-              <td>{{leaves[4]}}</td>
-            </tr>
-                {% endfor %}
+              <td>{{item[23]}}</td>
+              <td>{{item[24]}}</td>
+              <td>{{item[25]}}</td>
+              <td>{{item[26]}}</td>
+              <td>{{item[27]}}</td>
+              <td><a href="/editAddress/{{item[0]}}"><button class="btn btn-primary">Edit</button></td>
+           </tr> 
                 {% endfor %}
           </tbody>
         </table>        
