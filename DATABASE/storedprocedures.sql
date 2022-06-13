@@ -16,23 +16,21 @@ $BODY$;
 
 -- PROCEDURE: public.sp_edit_employee(character varying, character varying, character varying)
 
-DROP PROCEDURE IF EXISTS public.sp_edit_employee(character varying, character varying, character varying, character varying, character varying, character varying);
-
 CREATE OR REPLACE PROCEDURE public.sp_edit_employee(
-	IN employeeid character varying,
+	IN employeeid integer,
 	IN firstname character varying,
 	IN middlename character varying,
 	IN lastname character varying,
 	IN gender character varying,
-	IN emptype character varying)
+	IN emptype integer)
 LANGUAGE 'plpgsql'
 AS $BODY$
 begin
--- update Employee_table
--- Set First_Name = firstname, Middle_Name = middlename, Last_Name = lastname, Gender = gender, Emp_Type = emptype
--- where Employee_ID = employeeid;
-    insert into "Employee_table" ("First_Name", "Middle_Name", "Last_Name","Gender","Emp_Type")
-    values (firstname, middlename, lastname, gender, emptype); 
+update "Employee_table"
+Set "First_Name" = firstname, "Middle_Name" = middlename, "Last_Name" = lastname, "Gender" = gender, "Emp_Type_ID" = emptype
+where "Employee_ID" = employeeid;
+    --insert into "Employee_table" ("First_Name", "Middle_Name", "Last_Name","Gender","Emp_Type")
+    --values (firstname, middlename, lastname, gender, emptype); 
 end;
 $BODY$;
 

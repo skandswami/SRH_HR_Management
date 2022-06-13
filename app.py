@@ -52,6 +52,10 @@ class Employee(db.Model):
     __table__ = Table('Employee_table', Base.metadata,
                     autoload=True, autoload_with=db.engine)
 
+class Employee_Type(db.Model):
+    __table__ = Table('Emp_type', Base.metadata,
+                    autoload=True, autoload_with=db.engine)
+
 class EmployeeLeaves(db.Model):
     __table__ = Table('Emp_Leaves', Base.metadata,
                     autoload=True, autoload_with=db.engine)
@@ -228,25 +232,53 @@ def CreateEmpPersonaldata():
 #         return redirect('/displayinfo')
 #    return render_template("edit.html",post=post)
 
+@app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
+#def editpersonaldata(employee_id):
+#     post=Personaldata.query.filter_by(employee_id=employee_id).first()
+#     if request.method == 'POST':
+#         employee_id=request.form.get('employee_id')
+#         fname=request.form.get('fname')
+#         lname=request.form.get('lname')
+#         DOB=request.form.get('DOB')
+#         gender=request.form.get('gender')
+#         SSN=request.form.get('SSnumber')
+#         Nationality=request.form.get("nationality")
+#         job_type=request.form.get('job_title')
+#         db.engine.execute(f"UPDATE `personaldata` SET `employee_id` = '{employee_id}', `fname` = '{fname}',`lname` = '{lname}', `DOB` = '{DOB}',`gender` = '{gender}', `SSN` = '{SSN}', `Nationality` = '{Nationality}',`job_type` = '{job_type}' WHERE `personaldata`.`employee_id` = {employee_id}")
+#         flash("Personal details updated successfully")
+#         return redirect('/displayinfo')
+#    return render_template("edit.html",post=post)
+
+
 @app.route("/employeeddetailsedit", methods=['GET', 'POST'])
 def employeedashboard():
+    employee = Employee.query.filter_by(Employee_ID = session['EmployeeId']).first()
+    Employee_ID=employee.Employee_ID
+    First_Name= employee.First_Name
+    Middle_Name = employee.Middle_Name
+    Last_Name = employee.Last_Name
+    Gender = employee.Gender
+    Emp_Type=Employee_Type.query.with_entities(Employee_Type.Emp_Type_ID,Employee_Type.Type_of_employee)
+    Emp_Type_ID = employee.Emp_Type_ID 
     if request.method == 'POST':
-        Employee_ID=request.form.get('Employee_ID')
-        print(Employee_ID)
+        Employee_ID=employee.Employee_ID
+        Employee_ID_INT = int(Employee_ID)
         First_Name=request.form.get('First_Name')
         Middle_Name=request.form.get('Middle_Name')
         Last_Name=request.form.get('Last_Name')
         #DOB=request.form.get('DOB')
         Gender=request.form.get('Gender')
-        Emp_Type=request.form.get('Emp_Type')
+        Emp_Type_ID=request.form.get('Emp_Type')
+        
         conn = DatabaseConnection()
         cur = conn.cursor()    
-        cur.execute(f"Call public.sp_edit_employee (`{Employee_ID}`,`{First_Name}`,`{Middle_Name}`,`{Last_Name}`,`{Gender}`,`{Emp_Type}`)")
+        cur.execute(f"Call public.sp_edit_employee ({Employee_ID_INT},'{First_Name}','{Middle_Name}','{Last_Name}','{Gender}',{Emp_Type_ID})")
         conn.commit()
         #personal_data=db.engine.execute(f"INSERT INTO `Employee_table` (`Employee_ID`,`First_Name`,`Middle_Name`,`Last_Name`,`Gender`,`Emp_Type`) VALUES ('{Employee_ID}','{First_Name}','{Middle_Name}','{Last_Name}','{Gender}','{Emp_Type}')")
         flash("Successfully Updated User Information")
         print("Successfully Updated User Information")
-    return render_template("Emp_Details_Editable.html")
+        return render_template("EmployeeDashboard.html")
+    return render_template("Emp_Details_Editable.html", data=employee, typedata = Emp_Type)
 
 @app.route("/contactdata", methods=['GET', 'POST'])
 def contactdata():
