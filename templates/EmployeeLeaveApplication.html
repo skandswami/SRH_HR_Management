@@ -110,19 +110,19 @@
             <div class = "col-md-4 jumbotron">
                 <h4 class = "text-center">Leaves Details</h4>
                 <form method="POST" action="">
-                    <div class="mb-2">
-                        <label for="LeaveCode" class="form-label">Leave Code</label>
-                        <input type="text" class="form-control" id="leave_code" name = "leave_code" aria-describedby="emailHelp" required>
-                    </div>            
     
                     <div class="mb-2">
-                        <label for="leaves_description" class="form-label">Leaves Description</label>
-                        <input type="text" class="form-control" id="leaves_description"  name ="leaves_description" aria-describedby="emailHelp" required>
+                        <label for="leave_date" class="form-label">Leave Date</label>
+                        <input type="date" class="form-control" id="leave_date"  name ="leave_date" aria-describedby="date" required>
                     </div>
 
                     <div class="mb-2">
-                      <label for="maximum_leaves_txt" class="form-label">Maximum leaves</label>
-                      <input type="number" class="form-control" id="maximum_leaves_txt"  name ="maximum_leaves_txt" aria-describedby="emailHelp" required>
+                      <label for="leave_type">Leave Type</label>
+                      <select type="text" class="form-control" id="4" name="leave_type" required>
+                        {% for item in data %}
+                      <option value="{{item.Leave_code}}">{{item.Leave_code}}</option>
+                      {% endfor %}
+                      </select>
                   </div>
     
                     <br>

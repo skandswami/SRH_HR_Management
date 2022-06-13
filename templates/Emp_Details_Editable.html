@@ -119,25 +119,26 @@
                 <h4 class = "text-center">Personal Details</h4>
                 <br>
                 <form action="" method="post">
-                    
+                    <!-- <p value="{{data.First_Name}}">{{data.First_Name}}</p> -->
+
                     <div class="mb-2">
                         <label for="Employee_ID" class="form-label">Employee ID</label>
-                        <label type="number" class="form-control" id="Employee_ID" name = "Employee_ID" aria-describedby="emailHelp">
+                        <label type="number" class="form-control" id="Employee_ID" name = "Employee_ID" aria-describedby="emailHelp" required value="{{data.Employee_ID}}">{{data.Employee_ID}}</label>
                     </div>
 
                     <div class="mb-2">
                         <label for="First_Name" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="First_Name" name = "First_Name" aria-describedby="emailHelp" required>
+                        <input type="text" class="form-control" id="First_Name" name = "First_Name" aria-describedby="emailHelp" value="{{data.First_Name}}" required>
                     </div>
                     
                     <div class="mb-2">
                       <label for="Middle_Name" class="form-label">Middle Name</label>
-                      <input type="text" class="form-control" id="Middle_Name" name = "Middle_Name" aria-describedby="emailHelp" required>
+                      <input type="text" class="form-control" id="Middle_Name" name = "Middle_Name" value="{{data.Middle_Name}}" aria-describedby="emailHelp">
                   </div>
     
                     <div class="mb-2">
                         <label for="Last_Name" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="Last_Name" name = "Last_Name" aria-describedby="emailHelp" required>
+                        <input type="text" class="form-control" id="Last_Name" name = "Last_Name" aria-describedby="emailHelp" value="{{data.Last_Name}}" required>
                     </div>
 
                     <br>
@@ -155,13 +156,25 @@
                         <label class="form-check-label" for="non-binary">Non-binary</label>
                     </div>
                     <br>
-                    <div class="mb-2">
+                    <!-- <div class="mb-2">
                         <label for="Emp_Type">Employee Type</label>
                         <select type="text" class="form-control" id="Emp_Type" name="Emp_Type" required>
                         <option value="Internal">Internal</option>
                         <option value="External">External</option>
                         </select>
-                    </div>
+                        <script>
+                          document.getElementById("Emp_Type").selectedIndex = "{{data.Emp_Type_ID}}";
+                        </script>
+                    </div> -->
+                    <div class="mb-2">
+                      <label for="Emp_Type">Employee Type</label>
+                      <select type="text" value = "{{data.Emp_Type_ID}}" class="form-control" id="Emp_Type" name="Emp_Type" required>
+                        {% for item in typedata %}
+                      <option value="{{item.Emp_Type_ID}}">{{item.Type_of_employee}}</option>
+                      {% endfor %}
+
+                      </select>
+                  </div>
                     <br>
                    <button type="submit" class="btn btn-primary btn btn-primary btn-small btn-block">Save</button>
                 </form>

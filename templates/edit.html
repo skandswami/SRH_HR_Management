@@ -90,9 +90,6 @@
 
   <nav>
     <ul>
-      <li><a href="CreateEmployee" style="background-color:green;">Add Employee</a></li>
-      <li><a href="DisplayEmpInfo" style="background-color:fuchsia;">Employee Details</a></li>
-      <li><a href="employeelist" style="background-color:grey;">Employee List</a></li>
       <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
     </ul>
   </nav> 
@@ -123,57 +120,69 @@
                 <br>
                 <form action="/edit/{{post.employee_id}}" method="post">
                     
-                    <div class="mb-2">
-                        <label for="employee_id" class="form-label">Employee ID</label>
-                        <input type="number" class="form-control" id="employee_id" name = "employee_id" value={{post.employee_id}} aria-describedby="emailHelp" required>
-                    </div>
+                
 
-                    <div class="mb-2">
-                        <label for="fname" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="fname" name = "fname" value={{post.fname}} aria-describedby="emailHelp" required>
-                    </div>
-    
-                    <div class="mb-2">
-                        <label for="lname" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lname" name = "lname" value={{post.lname}} aria-describedby="emailHelp" required>
-                    </div>
-                    
-                    <div class="mb-2">
-                        <label for="DOB" class="form-label">Date Of Birth</label>
-                        <input type="date" class="form-control" id="DOB"  name ="DOB" value={{post.DOB}} aria-describedby="emailHelp" required>
-                    </div>
-                    
-                    <br>
-                    <div class="form-check form-check-inline">
-                        <label for="gender" class="form-label">gender</label>
-                        <input type="text" class="form-control" id="gender"  name ="gender" value={{post.gender}} aria-describedby="emailHelp" required>
-                        <input class="form-check-input" type="radio" name="gender" id="male" value="Male">
-                        <label class="form-check-label" for="male">Male</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gender" id="female" value="Female">
-                        <label class="form-check-label" for="female">Female</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gender" id="non-binary" value="Non-binary">
-                        <label class="form-check-label" for="non-binary">Non-binary</label>
-                    </div>
-                    <br>
-                    <div class="mb-2">
-                    <label for="SSnumber" class="form-label">Social Security Number</label>
-                    <input type="number" class="form-control" id="SSnumber" name="SSnumber" value={{post.SSN}} required>
-                    </div>
+                <div class="mb-2">
+                    <label for="empid" class="form-label">Employee ID</label>
+                    <input type="number" class="form-control" id="empid" name = "empid" aria-describedby="emailHelp" required>
+                </div>
 
-                    <div class="mb-2">
-                        <label for="nationality" class="form-label">Nationality</label>
-                        <input type="text" class="form-control" id="nationality" name="nationality" value={{post.Nationality}} required>
-                    </div>
+                <div class="mb-2">
+                    <label for="maritalstat" class="form-label">Marital Status</label>
+                    <input type="text" class="form-control" id="maritalstat" name = "maritalstat" aria-describedby="emailHelp" required>
+                </div>
+                
+                <div class="mb-2">
+                    <label for="qualification" class="form-label">Qualification</label>
+                    <input type="text" class="form-control" id="qualification"  name ="qualification" aria-describedby="emailHelp" required>
+                </div>
+
+                <div class="mb-2">
+                  <label for="lastemployer" class="form-label">Last Employer</label>
+                  <input type="text" class="form-control" id="lastemployer"  name ="lname" aria-describedby="lastemployer" required>
+                </div>
+
+                <div class="mb-2">
+                  <label for="lastempadd" class="form-label">Last Employer Address</label>
+                  <input type="text" class="form-control" id="lastempadd"  name ="lastempadd" aria-describedby="emailHelp" required>
+                </div>
+
+                <div class="mb-2">
+                  <label for="lastempcont" class="form-label">Last Employer Contact Number</label>
+                  <input type="text" class="form-control" id="lastempcont"  name ="lastempcont" aria-describedby="emailHelp" >
+                </div>
+
+                <div class="mb-2">
+                  <label for="prevrole" class="form-label">Previous Role</label>
+                  <input type="text" class="form-control" id="prevrole"  name ="prevrole" aria-describedby="emailHelp" required>
+                </div>
+
+                <div class="mb-2">
+                  <label for="taxid" class="form-label">Tax Id</label>
+                  <input type="text" class="form-control" id="taxid"  name ="taxid" aria-describedby="emailHelp" required>
+                </div>
+
+                <div class="mb-2">
+                  <label for="DOB" class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" id="DOB"  name ="DOB" aria-describedby="emailHelp" required>
+                </div>
+
+                <div class="mb-2">
+                  <label for="nationality" class="form-label">Nationality</label>
+                  <input type="text" class="form-control" id="nationality"  name ="nationality" aria-describedby="emailHelp" required>
+                </div>
+
+                <div class="mb-2">
+                  <label for="bloodgrp" class="form-label">Blood Group</label>
+                  <input type="text" class="form-control" id="bloodgrp"  name ="bloodgrp" aria-describedby="emailHelp" required>
+                </div>
+
                     <br>
                     <div class="mb-2">
                         <label for="jobtype">Employee Type</label>
                         <select type="text" class="form-control" id="job_title" name="job_title" value={{post.job_title}} required>
-                        <option value="Internal">Internal</option>
-                        <option value="External">External</option>
+                        <option value="Internal">Permannt</option>
+                        <option value="External">Contractor</option>
                         </select>
                     </div>
                     <br>
