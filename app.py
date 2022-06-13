@@ -218,8 +218,7 @@ def CreateEmpPersonaldata():
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
 def edit(employee_id):
-    employee_id=request.form.get('empid')
-    post=Employee_Personal_table.query.filter_by(employee_id=employee_id).first()
+    post=Employee_Personal_table.query.filter_by(Employee_ID=employee_id).first()
     if request.method == 'POST':
          employee_id=request.form.get('empid')
          marital_status=request.form.get('maritalstat')
@@ -230,15 +229,15 @@ def edit(employee_id):
          previous_role=request.form.get('prevrole')
          tax_id=request.form.get('taxid')
          date_of_birth=request.form.get("DOB")
-         nationality=request.form.get("nationality")
+         nationality=request.form.get('nationality')
          blood_group=request.form.get('bloodgrp')
          conn = DatabaseConnection()
          cur = conn.cursor()  
-         cur.execute(f"Call public.update_personal_empdata (`{employee_id}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,`{last_employer_contact}`,`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
+         cur.execute(f"Call public.update_personal_empdata (`{employee_id}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,`{last_employer_contact}`,'{previous_role}',`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
          conn.commit()  
          flash("Personal details updated successfully")
-         return redirect('/edit')
-    return render_template("edit.html",post=post)
+         return redirect('/edit/<string:employee_id>')
+    return render_template("edit.html", post = post)
 
 @app.route("/contactdata", methods=['GET', 'POST'])
 def contactdata():
@@ -355,7 +354,7 @@ def financedata():
 def DisplayEmpInfo():
     if request.method == 'POST':
         empid=request.form.get('empid')
-        exists = Employee_Personal_table.query.filter_by(employee_id=empid).first()
+        exists = Employee_table.query.filter_by(employee_id=empid).first()
         if exists:
             session ['empid'] = empid
             return redirect(url_for("DisplayEmpInfo"))
@@ -420,13 +419,14 @@ def EmployeeAppraisal():
 
 @app.route('/employeelist')
 def employeelist():
-    # cur = mysql.connection.cursor()
-    # eid=session.get('eid', None)
-    # cur.execute("""SELECT * FROM personaldata""")
-    # emps=cur.fetchall()
-    return render_template("employeelist.html",emps=emps)
-    # return "Employee List"
-
+    eid=session.get('eid', None)
+    conn = DatabaseConnection()
+    cur = conn.cursor()
+    emps = cur.execute(f"Call public.sp_emp_appraisal('{Emp_perfomance_id}', '{Employee_Id}', '{Emp_rating}', '{Manager_rating}', '{Remarks}')")
+    conn.commit()
+    cur.execute("""SELECT * FROM personaldata""")
+    emps=cur.fetchall()
+    return render_template("employeelist.html",emps)
 @app.route('/logout')
 def logout():
     return render_template("index.html")
