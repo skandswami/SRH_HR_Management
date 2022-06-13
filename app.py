@@ -6,9 +6,7 @@ from threading import local
 from flask import Flask,render_template,request,session,redirect,url_for,flash
 from flask_login import  UserMixin
 import psycopg2
-from werkzeug.security import generate_password_hash,check_password_hash
-from flask_login import login_user,logout_user,LoginManager,login_manager
-from flask_login import login_required,current_user
+from flask_login import LoginManager,login_manager
 from sqlalchemy import Table, Column, Integer, ForeignKey, exists
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -19,7 +17,7 @@ Base = declarative_base()
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
-
+globalEmployeeId = 0
 login_manager=LoginManager(app)
 login_manager.login_view='HRLogin'
 
@@ -92,6 +90,7 @@ def EmployeeLog():
         password_check=EmployeeLogin.query.filter_by(password=HashFromPassword(password)).first()
         if user and password_check:
             flash("Successful Login")
+            globalEmployeeId = user.Employee_Id
             return redirect(url_for("EmployeeDashboard"))
         else:
             flash("Invalid email or password","danger")
@@ -347,29 +346,24 @@ def LeaveType():
         cur = conn.cursor()    
         cur.execute(f"Call public.add_leave_type('{leave_Code}','{leaves_description}', '{maximum_leaves}')")
         conn.commit()
-            # leaves_data=db.engine.execute(f"INSERT INTO `leaves` (`employee_id`,`leaves_allocated`,`leaves_utilised`,`leaves_remaining`) VALUES ('{employee_id}','{leaves_allocated}','{leaves_utilised}','{leaves_remaining}')")
         flash("Successfully created new leave type")
         return render_template("LeaveType.html")
     return render_template("LeaveType.html")
 
 @app.route('/EmployeeLeaveApplication', methods=['GET', 'POST'])
 def EmployeeLeaveApplication():
+    leave_type=Leaves.query.with_entities(Leaves.Leave_code)
     if request.method == 'POST':
-        leave_Code=request.form.get('leave_code')
-        leaves_description=request.form.get('leaves_description')
-        maximum_leaves_txt = request.form.get('maximum_leaves_txt')
-        maximum_leaves=int(maximum_leaves_txt)
-        leavetype = Leaves.query.filter_by(Leave_code=leave_Code).first()
-        if leavetype:
-            flash("type of leave already exist")
-            return render_template("LeaveType.html")
+        leave_date=request.form.get('leave_date')
+        leave_Type=request.form.get('leave_type')
+        # TODO: Add check for whether the type of leaves aren't aready consumed.
         conn = DatabaseConnection()
         cur = conn.cursor()    
-        cur.execute(f"Call public.add_leave_type('{leave_Code}','{leaves_description}', '{maximum_leaves}')")
+        cur.execute(f"Call public.apply_leave('{leave_date}','{leave_Type}')")
         conn.commit()
-        flash("Successfully created new leave type")
+        flash("Leave Successfully applied")
         return render_template("EmployeeLeaveApplication.html")
-    return render_template("EmployeeLeaveApplication.html")
+    return render_template("EmployeeLeaveApplication.html", data=leave_type)
 
 
 
