@@ -9,9 +9,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <style>
     * {
@@ -88,19 +85,17 @@
 </header>
 <section>
 
-  <nav>
+  <!-- <nav>
     <ul>
       <li><a href="CreateEmployee" style="background-color:green;">Add Employee</a></li>
       <li><a href="DisplayEmpInfo" style="background-color:fuchsia;">Employee Details</a></li>
       <li><a href="employeelist" style="background-color:grey;">Employee List</a></li>
-	    <li><a href="EmployeeAppraisal" style="background-color:cyan;">Employee Performance</a></li>
       <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
     </ul>
-  </nav> 
+  </nav>  -->
   
   <article>
-     <!--
-    {% with messages = get_flashed_messages() %}
+    <!-- {% with messages = get_flashed_messages() %}
  
     {% if messages %}
 
@@ -113,8 +108,7 @@
     </div>
     {% endfor %}
     {% endif %}
-    {% endwith %}
-  -->
+    {% endwith %} -->
     
     <div class = "container mt-3">
 
@@ -122,34 +116,51 @@
     
             <div class = "col-md-3"></div>
             <div class = "col-md-5 jumbotron">
-                <h4 class = "text-center">Performance Review </h4>
+                <h4 class = "text-center">Personal Details</h4>
                 <br>
-                <form action="EmployeeAppraisal" method="post">
+                <form action="" method="post">
                     
                     <div class="mb-2">
-                        <label for="Emp_perfomance_id" class="form-label">Employee Performance ID</label>
-                        <input type="number" class="form-control" id="Emp_perfomance_id" name = "Emp_perfomance_id" aria-describedby="emailHelp" required>
+                        <label for="Employee_ID" class="form-label">Employee ID</label>
+                        <label type="number" class="form-control" id="Employee_ID" name = "Employee_ID" aria-describedby="emailHelp">
                     </div>
 
                     <div class="mb-2">
-                        <label for="Employee_id" class="form-label">Employee ID</label>
-                        <input type="number" class="form-control" id="Employee_id" name = "Employee_id" aria-describedby="emailHelp" required>
+                        <label for="First_Name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="First_Name" name = "First_Name" aria-describedby="emailHelp" required>
                     </div>
+                    
+                    <div class="mb-2">
+                      <label for="Middle_Name" class="form-label">Middle Name</label>
+                      <input type="text" class="form-control" id="Middle_Name" name = "Middle_Name" aria-describedby="emailHelp" required>
+                  </div>
     
                     <div class="mb-2">
-                        <label for="Emp_rating" class="form-label">Employee Rating</label>
-                        <input type="number" class="form-control" id="Emp_rating" name = "Emp_rating" aria-describedby="emailHelp" required>
+                        <label for="Last_Name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="Last_Name" name = "Last_Name" aria-describedby="emailHelp" required>
                     </div>
-                    
-                    <div class="mb-2">
-                        <label for="Manager_rating" class="form-label">Manager Rating</label>
-                        <input type="number" class="form-control" id="Manager_rating"  name ="Manager_rating" aria-describedby="emailHelp" required>
+
+                    <br>
+                    <div class="form-check form-check-inline">
+                      <label for="Gender" class="form-label">Gender</label><br>
+                        <input class="form-check-input" type="radio" name="Gender" id="male" value="Male">
+                        <label class="form-check-label" for="male">Male</label>
                     </div>
-                    
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Gender" id="female" value="Female">
+                        <label class="form-check-label" for="female">Female</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Gender" id="non-binary" value="Non-binary">
+                        <label class="form-check-label" for="non-binary">Non-binary</label>
+                    </div>
                     <br>
                     <div class="mb-2">
-                    <label for="Remarks" class="form-label">Remarks</label>
-                    <textarea type="text" class="form-control" id="Remarks" name="Remarks" required></textarea>
+                        <label for="Emp_Type">Employee Type</label>
+                        <select type="text" class="form-control" id="Emp_Type" name="Emp_Type" required>
+                        <option value="Internal">Internal</option>
+                        <option value="External">External</option>
+                        </select>
                     </div>
                     <br>
                    <button type="submit" class="btn btn-primary btn btn-primary btn-small btn-block">Save</button>
