@@ -248,34 +248,10 @@ def contactdata():
 
 @app.route("/EmployeeDashboard", methods=['GET'])
 def EmployeeDashboard():
-#     if request.method == 'POST':
-#         email=request.form.get('email')
-#         employee_id=request.form.get('employee_id')
-#         address=request.form.get('address')
-#         city=request.form.get('city')
-#         state=request.form.get('state')
-#         plz=request.form.get('plz')
-#         country=request.form.get('country')
-#         phone_number=request.form.get("phone_number")
-#         contact_data=db.engine.execute(f"INSERT INTO `contactdata` (`email`,`employee_id`,`address`,`city`,`state`,`plz`,`country`,`phone_number`) VALUES ('{email}','{employee_id}','{address}','{city}','{state}','{plz}','{country}','{phone_number}')")
-#         flash("Employee contact Information created Successully")
-#         return redirect('/CreateEmployee')
     return render_template("EmployeeDashboard.html")
 
 @app.route("/HRDashboard", methods=['GET'])
 def HRDashboard():
-#     if request.method == 'POST':
-#         email=request.form.get('email')
-#         employee_id=request.form.get('employee_id')
-#         address=request.form.get('address')
-#         city=request.form.get('city')
-#         state=request.form.get('state')
-#         plz=request.form.get('plz')
-#         country=request.form.get('country')
-#         phone_number=request.form.get("phone_number")
-#         contact_data=db.engine.execute(f"INSERT INTO `contactdata` (`email`,`employee_id`,`address`,`city`,`state`,`plz`,`country`,`phone_number`) VALUES ('{email}','{employee_id}','{address}','{city}','{state}','{plz}','{country}','{phone_number}')")
-#         flash("Employee contact Information created Successully")
-#         return redirect('/CreateEmployee')
     return render_template("HRDashboard.html")
 
 @app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
@@ -355,6 +331,27 @@ def LeaveType():
         flash("Successfully created new leave type")
         return render_template("LeaveType.html")
     return render_template("LeaveType.html")
+
+@app.route('/EmployeeLeaveApplication', methods=['GET', 'POST'])
+def EmployeeLeaveApplication():
+    if request.method == 'POST':
+        leave_Code=request.form.get('leave_code')
+        leaves_description=request.form.get('leaves_description')
+        maximum_leaves_txt = request.form.get('maximum_leaves_txt')
+        maximum_leaves=int(maximum_leaves_txt)
+        leavetype = Leaves.query.filter_by(Leave_code=leave_Code).first()
+        if leavetype:
+            flash("type of leave already exist")
+            return render_template("LeaveType.html")
+        conn = DatabaseConnection()
+        cur = conn.cursor()    
+        cur.execute(f"Call public.add_leave_type('{leave_Code}','{leaves_description}', '{maximum_leaves}')")
+        conn.commit()
+        flash("Successfully created new leave type")
+        return render_template("EmployeeLeaveApplication.html")
+    return render_template("EmployeeLeaveApplication.html")
+
+
 
 # @app.route('/Salary', methods=['GET', 'POST'])
 # def Salary():
