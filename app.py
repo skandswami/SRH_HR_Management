@@ -174,7 +174,6 @@ def EmployeeReg():
 @app.route("/CreateEmpRecord", methods=['GET', 'POST'])
 def create_employee():
     if request.method == 'POST':
-        employee_id=request.form.get('employee_id')
         job_id=request.form.get('job_id')
         first_name=request.form.get('fname')
         middle_name=request.form.get('mname')
@@ -190,7 +189,7 @@ def create_employee():
         emp_type_id=request.form.get('emptypid')
         conn = DatabaseConnection()
         cur = conn.cursor()
-        cur.execute(f"Call public.cr_new_emp('{employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
+        cur.execute(f"Call public.cr_new_emp('{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
         conn.commit()
         flash("Employee Information created Successully")
         return redirect('/CreateEmpRecord')
@@ -251,9 +250,10 @@ def edit(employee_id):
          Accrued_leaves=request.form.get('accleaves')
          
 
+
          conn = DatabaseConnection()
          cur = conn.cursor()  
-         cur.execute(f"Call public.update_personal_empdata (`{employee_id}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,`{last_employer_contact}`,'{previous_role}',`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
+         cur.execute(f"Call public.update_personal_empdata (`{Employee_ID}`,`{Job_ID}`,`{First_Name}`,`{Middle_Name}`,`{Last_Name}`,`{Email}`,'{Mobile}',`{Date_of_joining}`,'{Manager_ID}','{Gender}','{Accrued_leaves}')")
          conn.commit()  
          flash("Personal details updated successfully")
          return redirect('/edit/<string:employee_id>')

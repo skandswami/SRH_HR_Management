@@ -88,13 +88,6 @@
 </header>
 <section>
 
-  <nav>
-    <ul>
-   
-      <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
-    </ul>
-  </nav> 
-  
   <article>
     {% with messages = get_flashed_messages() %}
  
@@ -121,11 +114,6 @@
                 <br>
                 <form action="" method="post">
                     
-                    <div class="mb-2">
-                        <label for="employee_id" class="form-label">Employee ID</label>
-                        <input type="number" class="form-control" id="employee_id" name = "employee_id" aria-describedby="emailHelp" required>
-                    </div>
-
                     <div class="mb-2">
                         <label for="job_id" class="form-label">Job ID</label>
                         <input type="number" class="form-control" id="job_id" name = "job_id" aria-describedby="emailHelp" required>
