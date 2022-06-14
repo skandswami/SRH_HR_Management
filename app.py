@@ -174,7 +174,6 @@ def EmployeeReg():
 @app.route("/CreateEmpRecord", methods=['GET', 'POST'])
 def create_employee():
     if request.method == 'POST':
-        employee_id=request.form.get('employee_id')
         job_id=request.form.get('job_id')
         first_name=request.form.get('fname')
         middle_name=request.form.get('mname')
@@ -190,7 +189,7 @@ def create_employee():
         emp_type_id=request.form.get('emptypid')
         conn = DatabaseConnection()
         cur = conn.cursor()
-        cur.execute(f"Call public.cr_new_emp('{employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
+        cur.execute(f"Call public.cr_new_emp('{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
         conn.commit()
         flash("Employee Information created Successully")
         return redirect('/CreateEmpRecord')
@@ -200,7 +199,6 @@ def create_employee():
 @app.route("/CreateEmpPersonaldata", methods=['GET', 'POST'])
 def CreateEmpPersonaldata():
     if request.method == 'POST':
-        emp_personal_id=request.form.get('emp_pid')
         empid=request.form.get('empid')
         marital_status=request.form.get('maritalstat')
         qualification=request.form.get('qualification')
@@ -212,9 +210,22 @@ def CreateEmpPersonaldata():
         date_of_birth=request.form.get("DOB")
         nationality=request.form.get("nationality")
         blood_group=request.form.get('bloodgrp')
+        employee_id=request.form.get('empid')
+        addr1_street_name=request.form.get('addr1sn')
+        addr1_building_name=request.form.get('ad1bldname')
+        addr1_house_no=request.form.get('ad1house')
+        addr1_city=request.form.get('ad1city')
+        addr1_postcode=request.form.get('ad1plz')
+        addr1_country=request.form.get('ad1country')
+        addr2_street_name=request.form.get('addr2sn')
+        addr2_building_name=request.form.get('ad2bldname')
+        addr2_house_no=request.form.get('ad2house')     
+        addr2_city=request.form.get('ad2city')
+        addr2_postcode=request.form.get('ad2plz')
+        addr2_country=request.form.get('ad2country')
         conn = DatabaseConnection()
         cur = conn.cursor()    
-        cur.execute(f"Call public.personal_data_emp (`{emp_personal_id}`,`{empid}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,'{previous_role}',`{last_employer_contact}`,`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
+        cur.execute(f"Call public.personal_data_emp (`{empid}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,'{previous_role}',`{last_employer_contact}`,`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}','{addr1_street_name}','{addr1_building_name}','{addr1_house_no}','{addr1_city}','{addr1_postcode}','{addr1_country}','{addr2_street_name}','{addr2_building_name}','{addr2_house_no}','{addr2_city}','{addr2_postcode}','{addr2_country}')")
         conn.commit()
         flash("Employee personal Information created Successully")
         return redirect('/CreateEmpPersonaldata')
@@ -222,26 +233,31 @@ def CreateEmpPersonaldata():
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
 def edit(employee_id):
-    post=EmployeePersonal.query.filter_by(Employee_ID=employee_id).first()
+
+    employee = Employee.query.filter_by(Employee_ID = employee_id).first()
+    # post=EmployeePersonal.query.filter_by(Employee_ID=employee_id).first()
     if request.method == 'POST':
-         employee_id=request.form.get('empid')
-         marital_status=request.form.get('maritalstat')
-         qualification=request.form.get('qualification')
-         last_employer=request.form.get('lastemployer')
-         last_employer_address=request.form.get('lastempadd')
-         last_employer_contact=request.form.get('lastempcont')
-         previous_role=request.form.get('prevrole')
-         tax_id=request.form.get('taxid')
-         date_of_birth=request.form.get("DOB")
-         nationality=request.form.get('nationality')
-         blood_group=request.form.get('bloodgrp')
+         Employee_ID=request.form.get('empid')
+         Job_ID=request.form.get('jobid')
+         First_Name=request.form.get('fname')
+         Middle_Name=request.form.get('mname')
+         Last_Name=request.form.get('lname')
+         Email=request.form.get('email')
+         Mobile=request.form.get('mobile')
+         Date_of_joining=request.form.get('doj')
+         Manager_ID=request.form.get("managerid")
+         Gender=request.form.get('gender')
+         Accrued_leaves=request.form.get('accleaves')
+         
+
+
          conn = DatabaseConnection()
          cur = conn.cursor()  
-         cur.execute(f"Call public.update_personal_empdata (`{employee_id}`,`{marital_status}`,`{qualification}`,`{last_employer}`,`{last_employer_address}`,`{last_employer_contact}`,'{previous_role}',`{tax_id}`,'{date_of_birth}','{nationality}','{blood_group}')")
+         cur.execute(f"Call public.update_personal_empdata (`{Employee_ID}`,`{Job_ID}`,`{First_Name}`,`{Middle_Name}`,`{Last_Name}`,`{Email}`,'{Mobile}',`{Date_of_joining}`,'{Manager_ID}','{Gender}','{Accrued_leaves}')")
          conn.commit()  
          flash("Personal details updated successfully")
          return redirect('/edit/<string:employee_id>')
-    return render_template("edit.html", post = post)
+    return render_template("edit.html", data = employee)
     
 #def editpersonaldata(employee_id):
 #     post=Personaldata.query.filter_by(employee_id=employee_id).first()
@@ -279,6 +295,7 @@ def edit(employee_id):
 
 @app.route("/employeeddetailsedit", methods=['GET', 'POST'])
 def employeedashboard():
+    # Read Employee information from database on page render
     employee = Employee.query.filter_by(Employee_ID = session['EmployeeId']).first()
     Employee_ID=employee.Employee_ID
     First_Name= employee.First_Name
@@ -288,22 +305,21 @@ def employeedashboard():
     Emp_Type=Employee_Type.query.with_entities(Employee_Type.Emp_Type_ID,Employee_Type.Type_of_employee)
     Emp_Type_ID = employee.Emp_Type_ID 
     if request.method == 'POST':
+        # If a post request is made, update variables with code input on site
         Employee_ID=employee.Employee_ID
         Employee_ID_INT = int(Employee_ID)
         First_Name=request.form.get('First_Name')
         Middle_Name=request.form.get('Middle_Name')
         Last_Name=request.form.get('Last_Name')
-        #DOB=request.form.get('DOB')
         Gender=request.form.get('Gender')
         Emp_Type_ID=request.form.get('Emp_Type')
         
+        # Execute stored procedure to update the database with new information
         conn = DatabaseConnection()
         cur = conn.cursor()    
         cur.execute(f"Call public.sp_edit_employee ({Employee_ID_INT},'{First_Name}','{Middle_Name}','{Last_Name}','{Gender}',{Emp_Type_ID})")
         conn.commit()
-        #personal_data=db.engine.execute(f"INSERT INTO `Employee_table` (`Employee_ID`,`First_Name`,`Middle_Name`,`Last_Name`,`Gender`,`Emp_Type`) VALUES ('{Employee_ID}','{First_Name}','{Middle_Name}','{Last_Name}','{Gender}','{Emp_Type}')")
         flash("Successfully Updated User Information")
-        print("Successfully Updated User Information")
         return render_template("EmployeeDashboard.html")
     return render_template("Emp_Details_Editable.html", data=employee, typedata = Emp_Type)
 
@@ -331,34 +347,41 @@ def EmployeeDashboard():
 def HRDashboard():
     return render_template("HRDashboard.html")
 
-#@app.route("/editcontact/<string:employee_id>", methods=['GET', 'POST'])
-#def editcontactdata(employee_id):
+#@app.route("/editpersonal/<string:employee_id>", methods=['GET', 'POST'])
+#def editpersonal(employee_id):
 #     posts=Contactdata.query.filter_by(employee_id=employee_id).first()
 #     if request.method == 'POST':
-#         email=request.form.get('email')
-#         employee_id=request.form.get('employee_id')
-#         address=request.form.get('address')
-#         city=request.form.get('city')
-#         state=request.form.get('state')
-#         plz=request.form.get('plz')
-#         country=request.form.get('country')
-#         phone_number=request.form.get("phone_number")
+#         Marital_status=request.form.get('email')
+#         Qualification=request.form.get('employee_id')
+#         Last_employer=request.form.get('address')
+#         Previous_role=request.form.get('city')
+#         Tax_ID=request.form.get('state')
+#         Date_of_Birth=request.form.get('plz')
+#         Nationality=request.form.get('plz')
+#         Blood_group=request.form.get('plz')
 #         db.engine.execute(f"UPDATE `contactdata` SET `email` = '{email}',`employee_id` = '{employee_id}', `address` = '{address}',`city` = '{city}', `state` = '{state}',`plz` = '{plz}', `country` = '{country}', `phone_number` = '{phone_number}' WHERE `contactdata`.`employee_id` = {employee_id}")
 #         flash("Personal details updated successfully")
 #         return redirect('/displayinfo')
-#    return render_template("editcontact.html",posts=posts)
+#    return render_template("editpersonal.html",posts=posts)
 
-@app.route("/skills", methods=['GET', 'POST'])
-def skills():
+@app.route("/editaddress", methods=['GET', 'POST'])
+def editaddress():
 #     if request.method == 'POST':
-#         employee_id=request.form.get('EmployeeId')
-#         highest_education=request.form.get('education')
-#         skillset=request.form.get('skillset')
-#         work_exp=request.form.get('wexp')
-#         wexp_details=request.form.get('fexp')
+#         Addr1_Street_Name=request.form.get('EmployeeId')
+#         Addr1_Building_Name=request.form.get('education')
+#         Addr1_House_No.=request.form.get('skillset')
+#         Addr1_City=request.form.get('wexp')
+#         Addr1_Postcode=request.form.get('wexp')
+#         Addr1_Country=request.form.get('fexp')
+#         Addr2_Street_Name=request.form.get('EmployeeId')
+#         Addr2_Building_Name=request.form.get('education')
+#         Addr2_House_No.=request.form.get('skillset')
+#         Addr2_City=request.form.get('wexp')
+#         Addr2_Postcode=request.form.get('wexp')
+#         Addr2_Country=request.form.get('fexp')
 #         finance_data=db.engine.execute(f"INSERT INTO `skills` (`employee_id`,`highest_education`,`skillset`,`work_exp`,`wexp_details`) VALUES ('{employee_id}','{highest_education}','{skillset}','{work_exp}','{wexp_details}')")
 #         flash("Employee skillset Information created Successully")
-#         return redirect('/CreateEmployee')
+#         return redirect('/editaddress')
     return render_template("skills.html")
 
 @app.route('/DisplayFinanceData')
@@ -655,18 +678,18 @@ def DisplayEmpInfo():
         empid=request.form.get('empid')
         exists = Employee.query.filter_by(Employee_ID=empid).first()
         if exists:
-            # session ['empid'] = empid
-            return redirect(url_for("displayinfo"))
+            employee_id = exists.Employee_ID
+            return redirect("displayinfo/" + str(employee_id))
         else:
             flash("eid doesnot exist")
         return redirect('/DisplayEmpInfo') 
     return render_template("DisplayEmpInfo.html")
 
-@app.route('/displayinfo')
-def displayinfo():
+@app.route('/displayinfo/<string:employee_id>')
+def displayinfo(employee_id):
     conn = DatabaseConnection()
     cur = conn.cursor()
-    cur.execute(f"Call public.view_empinfo()")
+    cur.execute(f"Call public.view_empinfo('{employee_id}')")
     employeelist=cur.fetchall()
     conn.commit()
 # #     cur = mysql.connection.cursor()

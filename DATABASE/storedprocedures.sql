@@ -29,8 +29,6 @@ begin
 update "Employee_table"
 Set "First_Name" = firstname, "Middle_Name" = middlename, "Last_Name" = lastname, "Gender" = gender, "Emp_Type_ID" = emptype
 where "Employee_ID" = employeeid;
-    --insert into "Employee_table" ("First_Name", "Middle_Name", "Last_Name","Gender","Emp_Type")
-    --values (firstname, middlename, lastname, gender, emptype); 
 end;
 $BODY$;
 
