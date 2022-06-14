@@ -361,6 +361,28 @@ def skills():
 #         return redirect('/CreateEmployee')
     return render_template("skills.html")
 
+@app.route('/DisplayFinanceData')
+def displayFinanceData():
+    conn = DatabaseConnection()
+    cur = conn.cursor()
+    cur.execute(f"Call public.sp_emp_financeinfo_view()")
+    financeData=cur.fetchall()
+    conn.commit()
+    return render_template("DisplayFinanceData.html", finance = financeData)
+
+@app.route("/SearchFinanceData",methods=['POST','GET'])
+def searchFinanceData():
+    financeData=[('','','','','','','','','','','','','','','','','')]
+    if request.method == "POST":
+        employee_id=request.form.get('employee_id')
+        if employee_id is not None:
+            conn = DatabaseConnection()
+            cur = conn.cursor()
+            cur.execute(f"Call public.sp_emp_finance_search('{employee_id}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)")
+            financeData = cur.fetchall()
+            # print (db_data[0][0])
+    return render_template("SearchFinanceData.html", fin = financeData)
+
 @app.route("/CreateFinanceData", methods=['GET', 'POST'])
 def createFinanceData():
     if request.method == 'POST':
@@ -426,40 +448,27 @@ def deleteFinancedata():
         return redirect('/DeleteFinanceData')
     return render_template("DeleteFinanceData.html")
 
-@app.route("/DisplayDeptData",methods=['POST','GET'])
+@app.route('/DisplayDeptData')
 def displayDeptData():
+    conn = DatabaseConnection()
+    cur = conn.cursor()
+    cur.execute(f"Call public.sp_emp_dept_view()")
+    department=cur.fetchall()
+    conn.commit()
+    return render_template("DisplayDeptData.html", dept = department)
+
+@app.route("/SearchDeptData",methods=['POST','GET'])
+def searchDeptData():
     db_data=[('','','','','','')]
     if request.method == "POST":
         employee_id=request.form.get('employee_id')
         if employee_id is not None:
             conn = DatabaseConnection()
             cur = conn.cursor()
-            cur.execute(f"Call public.sp_emp_dept_view('{employee_id}', NULL, NULL, NULL, NULL, NULL, NULL)")
+            cur.execute(f"Call public.sp_emp_dept_search('{employee_id}', NULL, NULL, NULL, NULL, NULL, NULL)")
             db_data = cur.fetchall()
             print (db_data[0][0])
-            #conn.commit()
-            flash("Performance Review recalled")
-    return render_template("DisplayDeptData.html", dept_data = db_data)
-
-# @app.route("/DisplayDeptData",methods=['POST','GET'])
-# def displayDeptData():
-#     db_data=[('','','','','','','')]
-#     if request.method == "POST":
-#         conn = DatabaseConnection()
-#         employee_id="select Employee_ID from Emp_Dept_table"
-#         dept_no="select Dept_no. from Emp_Dept_table"
-#         dept_name="select Dept_Name from Department_table"
-#         dept_contact_no="select Dept_contact_no from Department_table"
-#         join_date="select Emp_dept_joining_date from Emp_Dept_table"
-#         leave_date="select Emp_dept_leaving_date from Emp_Dept_table"
-#         timestamp="select Creation_Timestamp from Department_table"
-#         cur = conn.cursor()
-#         cur.execute(f"Call public.sp_emp_dept_view('{employee_id}', '{dept_no}', '{dept_name}', '{dept_contact_no}', '{join_date}', '{leave_date}', '{timestamp}')")
-#         db_data = cur.fetchall()
-#         print (db_data[0][0])
-#         #conn.commit()
-#         flash("Performance Review recalled")
-#     return render_template("DisplayDeptData.html", dept_data = db_data)
+    return render_template("SearchDeptData.html", dept_data = db_data)
 
 @app.route("/CreateDeptData", methods=['GET', 'POST'])
 def createDeptData():
@@ -503,6 +512,29 @@ def deleteDeptdata():
         flash("Employee Department Information Successfully Deleted")
         return redirect('/DeleteDeptData')
     return render_template("DeleteDeptData.html")
+
+@app.route('/DisplayJobData')
+def displayJobData():
+    conn = DatabaseConnection()
+    cur = conn.cursor()
+    cur.execute(f"Call public.sp_emp_job_view()")
+    jobDetails=cur.fetchall()
+    conn.commit()
+    return render_template("DisplayJobData.html", jobs = jobDetails)
+
+@app.route("/SearchJobData",methods=['POST','GET'])
+def searchJobData():
+    jobData=[('','','','','','','','')]
+    if request.method == "POST":
+        employee_id=request.form.get('employee_id')
+        if employee_id is not None:
+            conn = DatabaseConnection()
+            cur = conn.cursor()
+            cur.execute(f"Call public.sp_emp_job_search('{employee_id}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)")
+            jobData = cur.fetchall()
+            # print (db_data[0][0])
+    return render_template("SearchJobData.html", job = jobData)
+
 
 @app.route("/CreateJob", methods=['GET', 'POST'])
 def createJob():

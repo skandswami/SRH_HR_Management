@@ -9,9 +9,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <style>
     * {
@@ -87,15 +84,14 @@
   <h2>HR Management System</h2>
 </header>
 <section>
-
   <nav>
     <ul>
-      <li><a href="DisplayDeptData" style="background-color:#777;">Display</a></li><br>
+      <li><a href="CreateDeptData" style="background-color:#777;">Create</a></li><br>
       <li><a href="UpdateDeptData" style="background-color:#777;">Update</a></li><br>
       <li><a href="DeleteDeptData" style="background-color:#777;">Delete</a></li><br>
       <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
     </ul>
-  </nav> 
+  </nav>
   
   <article>
     {% with messages = get_flashed_messages() %}
@@ -112,52 +108,42 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    
-    <div class = "container mt-3">
-
-        <div class = "row">
-    
-            <div class = "col-md-3"></div>
-            <div class = "col-md-5 jumbotron">
-                <h4 class = "text-center">Department Details</h4>
-                <br>
-                <form action="" method="post">
-                    
-                  <div class="mb-2">
-                    <label for="emp_dept_id" class="form-label">ID</label>
-                    <input type="number" class="form-control" id="emp_dept_id" name = "emp_dept_id" aria-describedby="emailHelp" required>
-                  </div>
-                    <div class="mb-2">
-                        <label for="employee_id" class="form-label">Employee ID</label>
-                        <input type="number" class="form-control" id="employee_id" name = "employee_id" aria-describedby="emailHelp" required>
-                    </div>
-
-                    <div class="mb-2">
-                        <label for="deptid" class="form-label">Department ID</label>
-                        <input type="text" class="form-control" id="deptid" name = "deptid" aria-describedby="emailHelp" required>
-                    </div>
-
-                    <div class="mb-2">
-                      <label for="join_date" class="form-label">Joining Date</label>
-                      <input type="date" class="form-control" id="join_date" name = "join_date" aria-describedby="emailHelp" required>
-                    </div>
-
-                    <div class="mb-2">
-                      <label for="leave_date" class="form-label">Leaving Date</label>
-                      <input type="date" class="form-control" id="leave_date" name = "leave_date" aria-describedby="emailHelp">
-                    </div>
-
-                    <br>
-                   <button type="submit" class="btn btn-primary btn btn-primary btn-small btn-block">Save</button>
-                </form>
-    
-            </div>
-            <div class = "col-md-4"></div>
-    
-        </div>
-    
-    </div>
+    <div class="container">
+        <h2>Employee Department Information</h2>       
+        <table class="table" id="tableID">
+          <thead>
+            <tr>
+              <th>Department Number</th>
+              <th>Department Name</th>
+              <th>Employee ID</th>
+              <th>Department Contact Number</th>
+              <th>Join Date</th>
+              <th>Leave Date</th>
+              <th>Creation Timestamp</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+              {% for dep in dept %}
+            <tr>
+              <td>{{dep[0]}}</td>
+              <td>{{dep[1]}}</td>
+              <td>{{dep[2]}}</td>
+              <td>{{dep[3]}}</td>
+              <td>{{dep[4]}}</td>
+              <td>{{dep[5]}}</td>
+              <td>{{dep[6]}}</td>
+            </tr>
+                {% endfor %}
+          </tbody>
+        </table> 
+        <a href="SearchDeptData">
+            <input type="button" value="Search">
+        </a>
+        <!-- <a href="DisplayDeptData" style="background-color:#777;">Search</a>       -->
+      </div>
   </article>
 </section>
 </body>
 </html>
+

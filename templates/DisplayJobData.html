@@ -9,9 +9,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <style>
     * {
@@ -87,15 +84,14 @@
   <h2>HR Management System</h2>
 </header>
 <section>
-
   <nav>
     <ul>
-      <li><a href="DisplayJobData" style="background-color:#777;">Display</a></li><br>
       <li><a href="CreateJob" style="background-color:#777;">Create</a></li><br>
       <li><a href="UpdateJob" style="background-color:#777;">Update</a></li><br>
+      <li><a href="DeleteJobData" style="background-color:#777;">Delete</a></li><br>
       <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
     </ul>
-  </nav> 
+  </nav>
   
   <article>
     {% with messages = get_flashed_messages() %}
@@ -112,32 +108,46 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    
-    <div class = "container mt-3">
-
-        <div class = "row">
-    
-            <div class = "col-md-3"></div>
-            <div class = "col-md-5 jumbotron">
-                <h4 class = "text-center">Delete Job</h4>
-                <br>
-                <form action="" method="post">
-                    <div class="mb-2">
-                        <label for="employee_id" class="form-label">Employee ID</label>
-                        <input type="number" class="form-control" id="employee_id" name = "employee_id" aria-describedby="emailHelp" required>
-                    </div>
-
-                    <br>
-                   <button type="submit" class="btn btn-primary btn btn-primary btn-small btn-block">Delete</button>
-                </form>
-    
-            </div>
-            <div class = "col-md-4"></div>
-    
-        </div>
-    
-    </div>
+    <div class="container">
+        <h2>Display Job Information</h2>       
+        <table class="table" id="tableID">
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Job Id</th>
+              <th>Creation Timestamp</th>
+              <th>Updated On</th>
+              <th>Description</th>
+              <th>Department Number</th>
+              <th>Activity Status</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+              {% for job in jobs %}
+            <tr>
+              <td>{{job[0]}}</td>
+              <td>{{job[1]}}</td>
+              <td>{{job[2]}}</td>
+              <td>{{job[3]}}</td>
+              <td>{{job[4]}}</td>
+              <td>{{job[5]}}</td>
+              <td>{{job[6]}}</td>
+              <td>{{job[7]}}</td>
+              <td>{{job[8]}}</td>
+            </tr>
+                {% endfor %}
+          </tbody>
+        </table> 
+        <a href="SearchJobData">
+            <input type="button" value="Search">
+        </a>
+        <!-- <a href="DisplayDeptData" style="background-color:#777;">Search</a>       -->
+      </div>
   </article>
 </section>
 </body>
 </html>
+

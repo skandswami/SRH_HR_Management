@@ -9,9 +9,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <style>
     * {
@@ -87,12 +84,11 @@
   <h2>HR Management System</h2>
 </header>
 <section>
-
   <nav>
     <ul>
-      <li><a href="DisplayJobData" style="background-color:#777;">Display</a></li><br>
-      <li><a href="CreateJob" style="background-color:#777;">Create</a></li><br>
-      <li><a href="UpdateJob" style="background-color:#777;">Update</a></li><br>
+      <li><a href="CreateFinanceData" style="background-color:#777;">Create</a></li><br>
+      <li><a href="UpdateFinanceData" style="background-color:#777;">Update</a></li><br>
+      <li><a href="DeleteFinanceData" style="background-color:#777;">Delete</a></li><br>
       <li><a class="btn btn-primary" href="logout" role="button"> &nbsp;Logout&nbsp;&nbsp;&nbsp;</a></a></li>
     </ul>
   </nav> 
@@ -112,32 +108,64 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    
-    <div class = "container mt-3">
-
-        <div class = "row">
-    
-            <div class = "col-md-3"></div>
-            <div class = "col-md-5 jumbotron">
-                <h4 class = "text-center">Delete Job</h4>
-                <br>
-                <form action="" method="post">
-                    <div class="mb-2">
-                        <label for="employee_id" class="form-label">Employee ID</label>
-                        <input type="number" class="form-control" id="employee_id" name = "employee_id" aria-describedby="emailHelp" required>
-                    </div>
-
-                    <br>
-                   <button type="submit" class="btn btn-primary btn btn-primary btn-small btn-block">Delete</button>
-                </form>
-    
-            </div>
-            <div class = "col-md-4"></div>
-    
-        </div>
-    
-    </div>
+    <div class="container">
+        <h2>Financial Information</h2>       
+        <table class="table" id="tableID">
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Bank Account Id</th>
+              <th>Bank Name</th>
+              <th>Account Number</th>
+              <th>IBAN</th>
+              <th>Location</th>
+              <th>Account Start Date</th>
+              <th>Account End Date</th>
+              <th>Salary Id</th>
+              <th>Bonus</th>
+              <th>Band</th>
+              <th>Monthly Salary</th>
+              <th>Annual Salary</th>
+              <th>Monthly Tax Deduction</th>
+              <th>Monthly Insurance Deduction</th>
+              <th>Monthly Pension Deduction</th>
+              <th>PF</th>
+              <th>Creation Timestamp</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+              {% for fin in finance %}
+            <tr>
+              <td>{{fin[0]}}</td>
+              <td>{{fin[1]}}</td>
+              <td>{{fin[2]}}</td>
+              <td>{{fin[3]}}</td>
+              <td>{{fin[4]}}</td>
+              <td>{{fin[5]}}</td>
+              <td>{{fin[6]}}</td>
+              <td>{{fin[7]}}</td>
+              <td>{{fin[8]}}</td>
+              <td>{{fin[9]}}</td>
+              <td>{{fin[10]}}</td>
+              <td>{{fin[11]}}</td>
+              <td>{{fin[12]}}</td>
+              <td>{{fin[13]}}</td>
+              <td>{{fin[14]}}</td>
+              <td>{{fin[15]}}</td>
+              <td>{{fin[16]}}</td>
+              <td>{{fin[17]}}</td>
+            </tr>
+                {% endfor %}
+          </tbody>
+        </table> 
+        <a href="SearchFinanceData">
+            <input type="button" value="Search">
+        </a>
+        <!-- <a href="DisplayDeptData" style="background-color:#777;">Search</a>       -->
+      </div>
   </article>
 </section>
 </body>
 </html>
+
