@@ -239,19 +239,17 @@ def edit(employee_id):
     # post=EmployeePersonal.query.filter_by(Employee_ID=employee_id).first()
     if request.method == 'POST':
          Employee_ID=request.form.get('empid')
-         Job_ID=request.form.get('maritalstat')
-         First_Name=request.form.get('qualification')
-         Middle_Name=request.form.get('lastemployer')
-         Last_Name=request.form.get('lastempadd')
-         Email=request.form.get('lastempcont')
-         Mobile=request.form.get('prevrole')
-         Date_of_joining=request.form.get('taxid')
-         Manager_ID=request.form.get("DOB")
-         Gender=request.form.get('nationality')
-         Accrued_leaves=request.form.get('bloodgrp')
-         Accrued_leaves=request.form.get('bloodgrp')
-
-
+         Job_ID=request.form.get('jobid')
+         First_Name=request.form.get('fname')
+         Middle_Name=request.form.get('mname')
+         Last_Name=request.form.get('lname')
+         Email=request.form.get('email')
+         Mobile=request.form.get('mobile')
+         Date_of_joining=request.form.get('doj')
+         Manager_ID=request.form.get("managerid")
+         Gender=request.form.get('gender')
+         Accrued_leaves=request.form.get('accleaves')
+         
 
          conn = DatabaseConnection()
          cur = conn.cursor()  
