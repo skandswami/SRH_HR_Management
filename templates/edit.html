@@ -116,63 +116,63 @@
     
             <div class = "col-md-3"></div>
             <div class = "col-md-5 jumbotron">
-                <h4 class = "text-center">Update Personal Details</h4>
+                <h4 class = "text-center">Update Employee Details</h4>
                 <br>
                 <form action="/edit/{{data.employee_id}}" method="post">
 
                 <div class="mb-2">
-                    <label for="empid" class="form-label">Employee ID</label>
+                    <label for="Employee_ID" class="form-label">Employee ID</label>
                     <label type="number" class="form-control" id="Employee_ID" name = "Employee_ID" aria-describedby="emailHelp" value="{{data.Employee_ID}}">{{data.Employee_ID}}</label>
                 </div>
 
                 <div class="mb-2">
-                    <label for="maritalstat" class="form-label">Job Id</label>
-                    <input type="text" class="form-control" id="maritalstat" name = "maritalstat" aria-describedby="emailHelp" required value="{{data.Job_ID}}"></input>
+                    <label for="Job_ID" class="form-label">Job Id</label>
+                    <input type="text" class="form-control" id="Job_ID" name = "Job_ID" aria-describedby="emailHelp" required value="{{data.Job_ID}}"></input>
                 </div>
                 
                 <div class="mb-2">
-                    <label for="qualification" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="qualification"  name ="qualification" aria-describedby="emailHelp" required value="{{data.First_Name}}">
+                    <label for="fname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="fname"  name ="fname" aria-describedby="emailHelp" required value="{{data.First_Name}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="lastemployer" class="form-label">Middle Name</label>
-                  <input type="text" class="form-control" id="lastemployer"  name ="lname" aria-describedby="lastemployer" required value="{{data.Middle_Name}}">
+                  <label for="mname" class="form-label">Middle Name</label>
+                  <input type="text" class="form-control" id="mname"  name ="mname" aria-describedby="lastemployer" required value="{{data.Middle_Name}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="lastempadd" class="form-label">Last Name</label>
-                  <input type="text" class="form-control" id="lastempadd"  name ="lastempadd" aria-describedby="emailHelp" required value="{{data.Last_Name}}">
+                  <label for="lname" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="lname"  name ="lname" aria-describedby="emailHelp" required value="{{data.Last_Name}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="lastempcont" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="lastempcont"  name ="lastempcont" aria-describedby="emailHelp" value="{{data.Email}}">
+                  <label for="emailid" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="emailid"  name ="emailid" aria-describedby="emailHelp" value="{{data.Email}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="prevrole" class="form-label">Mobile</label>
-                  <input type="number" class="form-control" id="prevrole"  name ="prevrole" aria-describedby="emailHelp" required value="{{data.Mobile}}">
+                  <label for="mobile" class="form-label">Contact</label>
+                  <input type="number" class="form-control" id="mobile"  name ="mobile" aria-describedby="emailHelp" required value="{{data.Mobile}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="taxid" class="form-label">Date of joining</label>
-                  <input type="date" class="form-control" id="taxid"  name ="taxid" aria-describedby="emailHelp" required value="{{data.Date_of_joining}}">
+                  <label for="doj" class="form-label">Date of joining</label>
+                  <input type="date" class="form-control" id="doj"  name ="doj" aria-describedby="emailHelp" required value="{{data.Date_of_joining}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="DOB" class="form-label">Manager Id</label>
-                  <input type="number" class="form-control" id="DOB"  name ="DOB" aria-describedby="emailHelp" required value="{{data.Manager_ID}}">
+                  <label for="managerid" class="form-label">Manager Id</label>
+                  <input type="number" class="form-control" id="managerid"  name ="managerid" aria-describedby="emailHelp" required value="{{data.Manager_ID}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="nationality" class="form-label">Gender</label>
-                  <input type="text" class="form-control" id="nationality"  name ="nationality" aria-describedby="emailHelp" required value="{{data.Gender}}">
+                  <label for="gender" class="form-label">Gender</label>
+                  <input type="text" class="form-control" id="gender"  name ="gender" aria-describedby="emailHelp" required value="{{data.Gender}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="bloodgrp" class="form-label">Accured Leaves</label>
-                  <input type="number" class="form-control" id="bloodgrp"  name ="bloodgrp" aria-describedby="emailHelp" required value="{{data.Accured_leaves}}">
+                  <label for="accleaves" class="form-label">Accured Leaves</label>
+                  <input type="number" class="form-control" id="accleaves"  name ="accleaves" aria-describedby="emailHelp" required value="{{data.Accured_leaves}}">
                 </div>
 
                     <br>

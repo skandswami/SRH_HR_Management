@@ -1,9 +1,8 @@
--- PROCEDURE: public.cr_new_emp(integer, integer, character varying, character varying, character varying, character varying, character varying, date,integer, character varying, integer, integer, integer, integer)
+-- PROCEDURE: public.cr_new_emp(integer, character varying, character varying, character varying, character varying, character varying, date, integer, character varying, integer, integer, integer, integer)
 
--- DROP PROCEDURE IF EXISTS public.cr_new_emp(integer, integer, character varying, character varying, character varying, character varying, character varying, date,integer, character varying, integer, integer, integer, integer);
+-- DROP PROCEDURE IF EXISTS public.cr_new_emp(integer, character varying, character varying, character varying, character varying, character varying, date, integer, character varying, integer, integer, integer, integer);
 
 CREATE OR REPLACE PROCEDURE public.cr_new_emp(
-	IN employee_id integer,
 	IN job_id integer,
 	IN first_name character varying,
 	IN middle_name character varying,
@@ -20,17 +19,19 @@ CREATE OR REPLACE PROCEDURE public.cr_new_emp(
 LANGUAGE 'plpgsql'
 AS $BODY$
 BEGIN
-INSERT into "Employee_table"("Employee_ID",
+INSERT into "Employee_table"(
 	"Job_ID","First_Name","Middle_Name",
     "Last_Name","Email",
-    "Mobile","Date_of_joining","Manager_ID","Gender",
+    "Mobile","Date_of_joining",
+	"Manager_ID","Gender",
 	"Accrued_leaves","Shift_code","Dept_no.","Emp_Type_ID ")
-values (Employee_ID,
+values (
 	Job_ID,First_Name,Middle_Name,
     Last_Name,Email,
-    Mobile,Date_of_joining,Manager_ID,Gender,
+    Mobile,Date_of_joining,
+	Manager_ID,Gender,
 	Accrued_leaves,Shift_code,Dept_no,Emp_Type_ID);
 end;
 $BODY$;
-ALTER PROCEDURE public.cr_new_emp(integer, integer, character varying, character varying, character varying, character varying, character varying, date, integer, character varying, integer, integer, integer, integer)
+ALTER PROCEDURE public.cr_new_emp(integer, character varying, character varying, character varying, character varying, character varying, date, integer, character varying, integer, integer, integer, integer)
     OWNER TO postgres;
