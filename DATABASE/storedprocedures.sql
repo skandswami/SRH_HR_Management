@@ -536,5 +536,315 @@ begin
 end
 $BODY$;
 
+-------------------------------------Display, Search for Finance Module-------------------------------------
 
+-- PROCEDURE: public.sp_emp_financeinfo_view(integer, integer, text, character varying, character varying, character varying, date, date, integer, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, timestamp without time zone)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_financeinfo_view(integer, integer, text, character varying, character varying, character varying, date, date, integer, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, timestamp without time zone);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_financeinfo_view(
+	INOUT employee_id integer DEFAULT NULL::integer,
+	INOUT bank_acc_id integer DEFAULT NULL::integer,
+	INOUT bank_name text DEFAULT NULL::text,
+	INOUT bank_acc_no character varying DEFAULT NULL::character varying,
+	INOUT bank_iban character varying DEFAULT NULL::character varying,
+	INOUT bank_location character varying DEFAULT NULL::character varying,
+	INOUT bank_acc_start_date date DEFAULT NULL::date,
+	INOUT bank_acc_end_date date DEFAULT NULL::date,
+	INOUT salary_id integer DEFAULT NULL::integer,
+	INOUT bonus character varying DEFAULT NULL::character varying,
+	INOUT salary_band character varying DEFAULT NULL::character varying,
+	INOUT monthly_salary character varying DEFAULT NULL::character varying,
+	INOUT annual_salary character varying DEFAULT NULL::character varying,
+	INOUT monthly_tax_deduction character varying DEFAULT NULL::character varying,
+	INOUT monthly_insurance_deductions character varying DEFAULT NULL::character varying,
+	INOUT monthly_pension_deductions character varying DEFAULT NULL::character varying,
+	INOUT pf_contribution character varying DEFAULT NULL::character varying,
+	INOUT salary_creation_timestamp timestamp without time zone DEFAULT NULL::timestamp without time zone)
+LANGUAGE 'plpgsql'
+AS $BODY$
+BEGIN
+SELECT ban."Employee_ID ",
+ban."Bank_acc_ID",
+acc."Bank_Name",
+acc."Bank_Account_No",
+acc."Bank_IBAN",
+acc."Bank_Location",
+ban."Bank_acc_start_date",
+ban."Bank_acc_end_date",
+ban."Salary_ID",
+sal."Bonus",
+sal."Salary_Band",
+sal."Monthly_Salary",
+sal."Annual_Salary",
+sal."Monthly_Tax _deduction",
+sal."Monthly_Insurance_deductions",
+sal."Monthly_Pension_deductions",
+sal."PF_contribution",
+sal."Salary_creation_timestamp"
+
+INTO
+employee_id,
+bank_acc_id,
+bank_name,
+bank_acc_no,
+bank_iban,
+bank_location,
+bank_acc_start_date,
+bank_acc_end_date,
+salary_id,
+bonus,
+salary_band,
+monthly_salary,
+annual_salary,
+monthly_tax_deduction,
+monthly_insurance_deductions,
+monthly_pension_deductions,
+pf_contribution,
+salary_creation_timestamp
+
+FROM public."Bank_Account_table" as acc,
+public."Emp_Bank_table" as ban,
+public."Emp_Salary_table" as sal
+
+WHERE ban."Bank_acc_ID" = acc."Bank_acc_ID"
+AND ban."Employee_ID " = sal."Employee_ID";
+
+END;
+$BODY$;
+
+-- PROCEDURE: public.sp_emp_finance_search(integer)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_finance_search(integer);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_finance_search(
+	IN employee_id integer,
+	OUT bank_acc_id integer,
+	OUT bank_name text,
+	OUT bank_acc_no character varying,
+	OUT bank_iban character varying,
+	OUT bank_location character varying,
+	OUT bank_acc_start_date date,
+	OUT bank_acc_end_date date,
+	OUT salary_id integer,
+	OUT bonus character varying,
+	OUT salary_band character varying,
+	OUT monthly_salary character varying,
+	OUT annual_salary character varying,
+	OUT monthly_tax_deduction character varying,
+	OUT monthly_insurance_deductions character varying,
+	OUT monthly_pension_deductions character varying,
+	OUT pf_contribution character varying,
+	OUT salary_creation_timestamp timestamp without time zone)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+
+SELECT ban."Bank_acc_ID",
+acc."Bank_Name",
+acc."Bank_Account_No",
+acc."Bank_IBAN",
+acc."Bank_Location",
+ban."Bank_acc_start_date",
+ban."Bank_acc_end_date",
+ban."Salary_ID",
+sal."Bonus",
+sal."Salary_Band",
+sal."Monthly_Salary",
+sal."Annual_Salary",
+sal."Monthly_Tax _deduction",
+sal."Monthly_Insurance_deductions",
+sal."Monthly_Pension_deductions",
+sal."PF_contribution",
+sal."Salary_creation_timestamp"
+
+INTO
+bank_acc_id,
+bank_name,
+bank_acc_no,
+bank_iban,
+bank_location,
+bank_acc_start_date,
+bank_acc_end_date,
+salary_id,
+bonus,
+salary_band,
+monthly_salary,
+annual_salary,
+monthly_tax_deduction,
+monthly_insurance_deductions,
+monthly_pension_deductions,
+pf_contribution,
+salary_creation_timestamp
+
+FROM public."Bank_Account_table" as acc,
+public."Emp_Bank_table" as ban,
+public."Emp_Salary_table" as sal
+
+WHERE ban."Bank_acc_ID" = acc."Bank_acc_ID"
+AND ban."Employee_ID " = sal."Employee_ID";
+end;
+$BODY$;
+
+
+-------------------------------------Display, Search for Department Module-------------------------------------
+
+-- PROCEDURE: public.sp_emp_dept_view(integer, text, integer, character varying, date, date, timestamp without time zone)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_dept_view(integer, text, integer, character varying, date, date, timestamp without time zone);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_dept_view(
+	INOUT dept_no integer DEFAULT NULL::integer,
+	INOUT dept_name text DEFAULT NULL::text,
+	INOUT employee_id integer DEFAULT NULL::integer,
+	INOUT dept_contact_no character varying DEFAULT NULL::character varying,
+	INOUT emp_dept_joining_date date DEFAULT NULL::date,
+	INOUT emp_dept_leaving_date date DEFAULT NULL::date,
+	INOUT creation_timestamp timestamp without time zone DEFAULT NULL::timestamp without time zone)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	SELECT edep."Dept_no.",
+	dep."Dept_Name",
+	edep."Employee_ID",
+	dep."Dept_contact_no",
+	edep."Emp_dept_joining_date",
+	edep."Emp_dept_leaving_date",
+	dep."Creation_Timestamp"
+	
+	INTO dept_no,
+	dept_name,
+	employee_id,
+	dept_contact_no,
+	emp_dept_joining_date,
+	emp_dept_leaving_date,
+	creation_timestamp
+	
+	FROM public."Emp_Dept_table" as edep,
+	public."Department_table" as dep
+	
+	WHERE edep."Dept_no." = dep."Dept_no.";
+	
+end;
+$BODY$;
+
+-- PROCEDURE: public.sp_emp_dept_search(integer)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_dept_search(integer);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_dept_search(
+	IN employee_id integer,
+	OUT dept_no integer,
+	OUT dept_name character varying,
+	OUT dept_contact_no character varying,
+	OUT dept_joining_date date,
+	OUT dept_leaving_date date,
+	OUT creation_timestamp timestamp without time zone)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+    select  "Dept_no.", 
+			"Emp_dept_joining_date",
+			"Emp_dept_leaving_date"
+	from public."Emp_Dept_table" 
+	INTO dept_no, dept_joining_date, dept_leaving_date
+	where "Emp_Dept_table"."Employee_ID"= employee_id;
+	
+	select  "Dept_Name", 
+			"Dept_contact_no",
+			"Creation_Timestamp"
+	from public."Department_table" 
+	INTO dept_name, dept_contact_no, creation_timestamp
+	where "Department_table"."Dept_no."=(select "Dept_no." from "Emp_Dept_table" where "Employee_ID" = employee_id);
+
+end;
+$BODY$;
+
+-------------------------------------Display, Search for Job Module-------------------------------------
+
+-- PROCEDURE: public.sp_emp_job_view(integer, integer, timestamp without time zone, date, text, integer, text, date, date)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_job_view(integer, integer, timestamp without time zone, date, text, integer, text, date, date);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_job_view(
+	INOUT employee_id integer DEFAULT NULL::integer,
+	INOUT job_id integer DEFAULT NULL::integer,
+	INOUT job_creation_timestamp timestamp without time zone DEFAULT NULL::timestamp without time zone,
+	INOUT job_updated_on date DEFAULT NULL::date,
+	INOUT job_description text DEFAULT NULL::text,
+	INOUT dept_no integer DEFAULT NULL::integer,
+	INOUT active_inactive text DEFAULT NULL::text,
+	INOUT job_start_date date DEFAULT NULL::date,
+	INOUT job_end_date date DEFAULT NULL::date)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+	SELECT ejob."Employee_ID",
+	ejob."Job_ID",
+	job."Job_creation_timestamp",
+	job."Job_updated_on",
+	job."Job_description",
+	job."Dept_no.",
+	job."Active/Inactive",
+	ejob."Job_start_date",
+	ejob."Job_end_date"
+	
+	INTO employee_id,
+	job_id,
+	job_creation_timestamp,
+	job_updated_on,
+	job_description,
+	dept_no,
+	active_inactive,
+	job_start_date,
+	job_end_date
+	
+	FROM public."Job_table" as job,
+	public."Emp_Job_table" as ejob
+
+	WHERE ejob."Job_ID" = job."Job_ID";
+end;
+$BODY$;
+
+-- PROCEDURE: public.sp_emp_job_search(integer)
+
+-- DROP PROCEDURE IF EXISTS public.sp_emp_job_search(integer);
+
+CREATE OR REPLACE PROCEDURE public.sp_emp_job_search(
+	IN employee_id integer,
+	OUT job_id integer,
+	OUT job_creation_timestamp timestamp without time zone,
+	OUT job_updated_on date,
+	OUT job_description text,
+	OUT dept_no integer,
+	OUT active_inactive text,
+	OUT job_start_date date,
+	OUT job_end_date date)
+LANGUAGE 'plpgsql'
+AS $BODY$
+begin
+    SELECT ejob."Job_ID",
+	job."Job_creation_timestamp",
+	job."Job_updated_on",
+	job."Job_description",
+	job."Dept_no.",
+	job."Active/Inactive",
+	ejob."Job_start_date",
+	ejob."Job_end_date"
+	
+	INTO job_id,
+	job_creation_timestamp,
+	job_updated_on,
+	job_description,
+	dept_no,
+	active_inactive,
+	job_start_date,
+	job_end_date
+	
+	FROM public."Job_table" as job,
+	public."Emp_Job_table" as ejob
+
+	WHERE ejob."Job_ID" = job."Job_ID";
+end;
+$BODY$;
 
