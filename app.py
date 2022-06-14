@@ -646,18 +646,18 @@ def DisplayEmpInfo():
         empid=request.form.get('empid')
         exists = Employee.query.filter_by(Employee_ID=empid).first()
         if exists:
-            # session ['empid'] = empid
-            return redirect(url_for("displayinfo"))
+            employee_id = exists.Employee_ID
+            return redirect("displayinfo/" + str(employee_id))
         else:
             flash("eid doesnot exist")
         return redirect('/DisplayEmpInfo') 
     return render_template("DisplayEmpInfo.html")
 
-@app.route('/displayinfo')
-def displayinfo():
+@app.route('/displayinfo/<string:employee_id>')
+def displayinfo(employee_id):
     conn = DatabaseConnection()
     cur = conn.cursor()
-    cur.execute(f"Call public.view_empinfo()")
+    cur.execute(f"Call public.view_empinfo('{employee_id}')")
     employeelist=cur.fetchall()
     conn.commit()
 # #     cur = mysql.connection.cursor()
