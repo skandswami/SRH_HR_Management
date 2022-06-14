@@ -258,40 +258,6 @@ def edit(employee_id):
          return redirect('/DisplayEmpInfo')
     return render_template("edit.html", data = employee)
     
-#def editpersonaldata(employee_id):
-#     post=Personaldata.query.filter_by(employee_id=employee_id).first()
-#     if request.method == 'POST':
-#         employee_id=request.form.get('employee_id')
-#         fname=request.form.get('fname')
-#         lname=request.form.get('lname')
-#         DOB=request.form.get('DOB')
-#         gender=request.form.get('gender')
-#         SSN=request.form.get('SSnumber')
-#         Nationality=request.form.get("nationality")
-#         job_type=request.form.get('job_title')
-#         db.engine.execute(f"UPDATE `personaldata` SET `employee_id` = '{employee_id}', `fname` = '{fname}',`lname` = '{lname}', `DOB` = '{DOB}',`gender` = '{gender}', `SSN` = '{SSN}', `Nationality` = '{Nationality}',`job_type` = '{job_type}' WHERE `personaldata`.`employee_id` = {employee_id}")
-#         flash("Personal details updated successfully")
-#         return redirect('/displayinfo')
-#    return render_template("edit.html",post=post)
-
-# @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
-#def editpersonaldata(employee_id):
-#     post=Personaldata.query.filter_by(employee_id=employee_id).first()
-#     if request.method == 'POST':
-#         employee_id=request.form.get('employee_id')
-#         fname=request.form.get('fname')
-#         lname=request.form.get('lname')
-#         DOB=request.form.get('DOB')
-#         gender=request.form.get('gender')
-#         SSN=request.form.get('SSnumber')
-#         Nationality=request.form.get("nationality")
-#         job_type=request.form.get('job_title')
-#         db.engine.execute(f"UPDATE `personaldata` SET `employee_id` = '{employee_id}', `fname` = '{fname}',`lname` = '{lname}', `DOB` = '{DOB}',`gender` = '{gender}', `SSN` = '{SSN}', `Nationality` = '{Nationality}',`job_type` = '{job_type}' WHERE `personaldata`.`employee_id` = {employee_id}")
-#         flash("Personal details updated successfully")
-#         return redirect('/displayinfo')
-#    return render_template("edit.html",post=post)
-
-
 @app.route("/employeeddetailsedit", methods=['GET', 'POST'])
 def employeedashboard():
     # Read Employee information from database on page render
@@ -324,18 +290,6 @@ def employeedashboard():
 
 @app.route("/contactdata", methods=['GET', 'POST'])
 def contactdata():
-#     if request.method == 'POST':
-#         email=request.form.get('email')
-#         employee_id=request.form.get('employee_id')
-#         address=request.form.get('address')
-#         city=request.form.get('city')
-#         state=request.form.get('state')
-#         plz=request.form.get('plz')
-#         country=request.form.get('country')
-#         phone_number=request.form.get("phone_number")
-#         contact_data=db.engine.execute(f"INSERT INTO `contactdata` (`email`,`employee_id`,`address`,`city`,`state`,`plz`,`country`,`phone_number`) VALUES ('{email}','{employee_id}','{address}','{city}','{state}','{plz}','{country}','{phone_number}')")
-#         flash("Employee contact Information created Successully")
-#         return redirect('/CreateEmployee')
     return render_template("contactdata.html")
 
 @app.route("/EmployeeDashboard", methods=['GET'])
@@ -346,41 +300,8 @@ def EmployeeDashboard():
 def HRDashboard():
     return render_template("HRDashboard.html")
 
-#@app.route("/editpersonal/<string:employee_id>", methods=['GET', 'POST'])
-#def editpersonal(employee_id):
-#     posts=Contactdata.query.filter_by(employee_id=employee_id).first()
-#     if request.method == 'POST':
-#         Marital_status=request.form.get('email')
-#         Qualification=request.form.get('employee_id')
-#         Last_employer=request.form.get('address')
-#         Previous_role=request.form.get('city')
-#         Tax_ID=request.form.get('state')
-#         Date_of_Birth=request.form.get('plz')
-#         Nationality=request.form.get('plz')
-#         Blood_group=request.form.get('plz')
-#         db.engine.execute(f"UPDATE `contactdata` SET `email` = '{email}',`employee_id` = '{employee_id}', `address` = '{address}',`city` = '{city}', `state` = '{state}',`plz` = '{plz}', `country` = '{country}', `phone_number` = '{phone_number}' WHERE `contactdata`.`employee_id` = {employee_id}")
-#         flash("Personal details updated successfully")
-#         return redirect('/displayinfo')
-#    return render_template("editpersonal.html",posts=posts)
-
 @app.route("/editaddress", methods=['GET', 'POST'])
 def editaddress():
-#     if request.method == 'POST':
-#         Addr1_Street_Name=request.form.get('EmployeeId')
-#         Addr1_Building_Name=request.form.get('education')
-#         Addr1_House_No.=request.form.get('skillset')
-#         Addr1_City=request.form.get('wexp')
-#         Addr1_Postcode=request.form.get('wexp')
-#         Addr1_Country=request.form.get('fexp')
-#         Addr2_Street_Name=request.form.get('EmployeeId')
-#         Addr2_Building_Name=request.form.get('education')
-#         Addr2_House_No.=request.form.get('skillset')
-#         Addr2_City=request.form.get('wexp')
-#         Addr2_Postcode=request.form.get('wexp')
-#         Addr2_Country=request.form.get('fexp')
-#         finance_data=db.engine.execute(f"INSERT INTO `skills` (`employee_id`,`highest_education`,`skillset`,`work_exp`,`wexp_details`) VALUES ('{employee_id}','{highest_education}','{skillset}','{work_exp}','{wexp_details}')")
-#         flash("Employee skillset Information created Successully")
-#         return redirect('/editaddress')
     return render_template("skills.html")
 
 @app.route('/DisplayFinanceData')
@@ -645,32 +566,6 @@ def EmployeeLeaveApplication():
         return render_template("EmployeeLeaveApplication.html", data=leave_type)
     return render_template("EmployeeLeaveApplication.html", data=leave_type)
 
-
-
-# @app.route('/Salary', methods=['GET', 'POST'])
-# def Salary():
-#     if request.method == 'POST':
-#         salary_id=request.form.get('salaryid')
-#         employee_id=request.form.get('EmployeeId')
-#         salary=request.form.get('salary')
-#         bonus=request.form.get('bonus')
-#         benefits=request.form.get('benefits')
-#         salary_data=db.engine.execute(f"INSERT INTO `salary` (`salary_id`,`employee_id`,`salary`,`bonus`,`benefits`) VALUES ('{salary_id}','{employee_id}','{salary}','{bonus}','{benefits}')")
-#         flash("salary info updated Successully")
-#         return redirect('/CreateEmployee') 
-#     return render_template("Salary.html")
-
-
-# @app.route('/Equipment', methods=['GET', 'POST'])
-# def Equipment():
-#     if request.method == 'POST':
-#         employee_id=request.form.get('EmployeeId')
-#         equip_num_data=request.form.get('Equipment')
-#         equipment_data=db.engine.execute(f"INSERT INTO `equipment` (`employee_id`,`equip_num_data`) VALUES ('{employee_id}','{equip_num_data}')")
-#         flash("Equipment info updated Successully")
-#         return redirect('/CreateEmployee') 
-#     return render_template("Equipment.html")
-
 @app.route('/DisplayEmpInfo', methods=['GET', 'POST'])
 def DisplayEmpInfo():
     if request.method == 'POST':
@@ -691,42 +586,9 @@ def displayinfo(employee_id):
     cur.execute(f"Call public.view_empinfo('{employee_id}')")
     employeelist=cur.fetchall()
     conn.commit()
-# #     cur = mysql.connection.cursor()
-# #     eid=session.get('eid', None)
-# #     cur.execute("""SELECT * FROM personaldata WHERE employee_id='%s' """ %(eid))
-# #     emps=cur.fetchall()
-# #     cur.execute("""SELECT * FROM skills WHERE employee_id='%s' """ %(eid))
-# #     emp_skill=cur.fetchall()
-# #     cur.execute("""SELECT * FROM contactdata WHERE employee_id='%s' """ %(eid))
-# #     emp_contact=cur.fetchall()
-# #     cur.execute("""SELECT * FROM financedata WHERE employee_id='%s' """ %(eid))
-# #     emp_finance=cur.fetchall()
-# #     cur.execute("""SELECT * FROM organisationdata WHERE employee_id='%s' """ %(eid))
-# #     emp_organisation=cur.fetchall()
-# #     cur.execute("""SELECT * FROM salary WHERE employee_id='%s' """ %(eid))
-# #     emp_salary=cur.fetchall()
-# #     cur.execute("""SELECT * FROM leaves WHERE employee_id='%s' """ %(eid))
-# #     emp_leaves=cur.fetchall()
-# #     cur.execute("""SELECT * FROM equipment WHERE employee_id='%s' """ %(eid))
-# #     emp_equipment=cur.fetchall()
     return render_template("displayinfo.html", emps = employeelist)
-        # ,emps=emps,emp_skill=emp_skill,
-        # emp_contact=emp_contact,emp_finance=emp_finance,emp_organisation=emp_organisation,
-        # emp_salary=emp_salary,emp_leaves=emp_leaves,emp_equipment=emp_equipment)
+      
 
-# @app.route('/delete')
-# def delete():
-#     eid=session.get('eid', None)
-#     db.engine.execute(f"DELETE FROM `personaldata` WHERE `personaldata`.`employee_id`={eid}")
-#     db.engine.execute(f"DELETE FROM `contactdata` WHERE `contactdata`.`employee_id`={eid}")
-#     db.engine.execute(f"DELETE FROM `financedata` WHERE `financedata`.`employee_id`={eid}")
-#     db.engine.execute(f"DELETE FROM `skills` WHERE `skills`.`employee_id`={eid}")
-#     db.engine.execute(f"DELETE FROM `organisationdata` WHERE `organisationdata`.`employee_id`={eid}")
-#     db.engine.execute(f"DELETE FROM `salary` WHERE `salary`.`employee_id`={eid}")
-#     db.engine.execute(f"DELETE FROM `leaves` WHERE `leaves`.`employee_id`={eid}")
-#     db.engine.execute(f"DELETE FROM `equipment` WHERE `equipment`.`employee_id`={eid}")
-#     flash("all the data deleted successfully")
-#     return redirect("/DisplayEmpInfo") 
 
 @app.route("/EmployeeAppraisal",methods=['POST','GET'])
 def EmployeeAppraisal():
