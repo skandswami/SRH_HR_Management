@@ -174,7 +174,6 @@ def EmployeeReg():
 @app.route("/CreateEmpRecord", methods=['GET', 'POST'])
 def create_employee():
     if request.method == 'POST':
-        employee_id=request.form.get('employee_id')
         job_id=request.form.get('job_id')
         first_name=request.form.get('fname')
         middle_name=request.form.get('mname')
@@ -190,7 +189,7 @@ def create_employee():
         emp_type_id=request.form.get('emptypid')
         conn = DatabaseConnection()
         cur = conn.cursor()
-        cur.execute(f"Call public.cr_new_emp('{employee_id}','{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
+        cur.execute(f"Call public.cr_new_emp('{job_id}','{first_name}','{middle_name}','{last_name}','{email}','{mobile}','{date_of_joining}','{manager_id}','{gender}','{accrued_leaves}','{shift_code}','{dept_no}','{emp_type_id}')")
         conn.commit()
         flash("Employee Information created Successully")
         return redirect('/CreateEmpRecord')
@@ -237,9 +236,6 @@ def edit(employee_id):
          Manager_ID=request.form.get("DOB")
          Gender=request.form.get('nationality')
          Accrued_leaves=request.form.get('bloodgrp')
-         Accrued_leaves=request.form.get('bloodgrp')
-
-
 
          conn = DatabaseConnection()
          cur = conn.cursor()  
