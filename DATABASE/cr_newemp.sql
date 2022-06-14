@@ -41,9 +41,9 @@ ALTER PROCEDURE public.cr_new_emp(integer, character varying, character varying,
 
 ----------------------------------------------------------------------------------------------------------
 Personal Data entry procedure 
--- PROCEDURE: public.personal_data_emp(integer, character varying, character varying, character varying, character varying, character varying, text, character varying, date, character varying, character varying, integer, character varying, character varying, character varying, integer, character varying, character varying, character varying, character varying, integer, character varying)
+-- PROCEDURE: public.personal_data_emp(integer, character varying, character varying, character varying, character varying, character varying, text, character varying, date, character varying, character varying, integer, character varying, character varying, character varying, character varying, integer, character varying, character varying, character varying, character varying, character varying, integer, character varying)
 
--- DROP PROCEDURE IF EXISTS public.personal_data_emp(integer, character varying, character varying, character varying, character varying, character varying, text, character varying, date, character varying, character varying, integer, character varying, character varying, character varying, integer, character varying, character varying, character varying, character varying, integer, character varying);
+DROP PROCEDURE IF EXISTS public.personal_data_emp(integer, character varying, character varying, character varying, character varying, character varying, text, character varying, date, character varying, character varying, integer, character varying, character varying, character varying, character varying, integer, character varying, character varying, character varying, character varying, character varying, integer, character varying);
 
 CREATE OR REPLACE PROCEDURE public.personal_data_emp(
 	IN empid integer,
@@ -60,11 +60,13 @@ CREATE OR REPLACE PROCEDURE public.personal_data_emp(
 	IN employee_id integer,
 	IN addr1_street_name character varying,
 	IN addr1_building_name character varying,
+	IN addr1_house_no character varying,
 	IN addr1_city character varying,
 	IN addr1_postcode integer,
 	IN addr1_country character varying,
 	IN addr2_street_name character varying,
 	IN addr2_building_name character varying,
+	IN addr2_house_no character varying,
 	IN addr2_city character varying,
 	IN addr2_postcode integer,
 	IN addr2_country character varying)
@@ -86,9 +88,9 @@ values (Employee_ID,
 	Blood_group);
 	
 	INSERT into "Emp_address_table"(
-	"Employee_ID","Addr1_Street_Name","Addr1_Building_Name","Addr1_City",
+	"Employee_ID","Addr1_Street_Name","Addr1_Building_Name","Addr1_House_No","Addr1_City",
     "Addr1_Postcode","Addr1_Country",
-	"Addr2_Street_Name","Addr2_Building_Name","Addr2_City",
+	"Addr2_Street_Name","Addr2_Building_Name","Addr2_House_No","Addr2_City",
     "Addr2_Postcode","Addr2_Country")
 values (employee_id,addr1_street_name,
     addr1_building_name,addr1_city,
@@ -100,6 +102,5 @@ values (employee_id,addr1_street_name,
 		
 end;
 $BODY$;
-ALTER PROCEDURE public.personal_data_emp(integer, character varying, character varying, character varying, character varying, character varying, text, character varying, date, character varying, character varying, integer, character varying, character varying, character varying, integer, character varying, character varying, character varying, character varying, integer, character varying)
+ALTER PROCEDURE public.personal_data_emp(integer, character varying, character varying, character varying, character varying, character varying, text, character varying, date, character varying, character varying, integer, character varying, character varying, character varying, character varying, integer, character varying, character varying, character varying, character varying, character varying, integer, character varying)
     OWNER TO postgres;
-
