@@ -118,69 +118,67 @@
             <div class = "col-md-5 jumbotron">
                 <h4 class = "text-center">Update Personal Details</h4>
                 <br>
-                <form action="/edit/{{post.employee_id}}" method="post">
-                    
-                
+                <form action="/edit/{{data.employee_id}}" method="post">
 
                 <div class="mb-2">
                     <label for="empid" class="form-label">Employee ID</label>
-                    <input type="number" class="form-control" id="empid" name = "empid" aria-describedby="emailHelp" required>
+                    <label type="number" class="form-control" id="Employee_ID" name = "Employee_ID" aria-describedby="emailHelp" value="{{data.Employee_ID}}">{{data.Employee_ID}}</label>
                 </div>
 
                 <div class="mb-2">
-                    <label for="maritalstat" class="form-label">Marital Status</label>
-                    <input type="text" class="form-control" id="maritalstat" name = "maritalstat" aria-describedby="emailHelp" required>
+                    <label for="maritalstat" class="form-label">Job Id</label>
+                    <input type="text" class="form-control" id="maritalstat" name = "maritalstat" aria-describedby="emailHelp" required value="{{data.Job_ID}}"></input>
                 </div>
                 
                 <div class="mb-2">
-                    <label for="qualification" class="form-label">Qualification</label>
-                    <input type="text" class="form-control" id="qualification"  name ="qualification" aria-describedby="emailHelp" required>
+                    <label for="qualification" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="qualification"  name ="qualification" aria-describedby="emailHelp" required value="{{data.First_Name}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="lastemployer" class="form-label">Last Employer</label>
-                  <input type="text" class="form-control" id="lastemployer"  name ="lname" aria-describedby="lastemployer" required>
+                  <label for="lastemployer" class="form-label">Middle Name</label>
+                  <input type="text" class="form-control" id="lastemployer"  name ="lname" aria-describedby="lastemployer" required value="{{data.Middle_Name}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="lastempadd" class="form-label">Last Employer Address</label>
-                  <input type="text" class="form-control" id="lastempadd"  name ="lastempadd" aria-describedby="emailHelp" required>
+                  <label for="lastempadd" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="lastempadd"  name ="lastempadd" aria-describedby="emailHelp" required value="{{data.Last_Name}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="lastempcont" class="form-label">Last Employer Contact Number</label>
-                  <input type="text" class="form-control" id="lastempcont"  name ="lastempcont" aria-describedby="emailHelp" >
+                  <label for="lastempcont" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="lastempcont"  name ="lastempcont" aria-describedby="emailHelp" value="{{data.Email}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="prevrole" class="form-label">Previous Role</label>
-                  <input type="text" class="form-control" id="prevrole"  name ="prevrole" aria-describedby="emailHelp" required>
+                  <label for="prevrole" class="form-label">Mobile</label>
+                  <input type="number" class="form-control" id="prevrole"  name ="prevrole" aria-describedby="emailHelp" required value="{{data.Mobile}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="taxid" class="form-label">Tax Id</label>
-                  <input type="text" class="form-control" id="taxid"  name ="taxid" aria-describedby="emailHelp" required>
+                  <label for="taxid" class="form-label">Date of joining</label>
+                  <input type="date" class="form-control" id="taxid"  name ="taxid" aria-describedby="emailHelp" required value="{{data.Date_of_joining}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="DOB" class="form-label">Date of Birth</label>
-                  <input type="date" class="form-control" id="DOB"  name ="DOB" aria-describedby="emailHelp" required>
+                  <label for="DOB" class="form-label">Manager Id</label>
+                  <input type="number" class="form-control" id="DOB"  name ="DOB" aria-describedby="emailHelp" required value="{{data.Manager_ID}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="nationality" class="form-label">Nationality</label>
-                  <input type="text" class="form-control" id="nationality"  name ="nationality" aria-describedby="emailHelp" required>
+                  <label for="nationality" class="form-label">Gender</label>
+                  <input type="text" class="form-control" id="nationality"  name ="nationality" aria-describedby="emailHelp" required value="{{data.Gender}}">
                 </div>
 
                 <div class="mb-2">
-                  <label for="bloodgrp" class="form-label">Blood Group</label>
-                  <input type="text" class="form-control" id="bloodgrp"  name ="bloodgrp" aria-describedby="emailHelp" required>
+                  <label for="bloodgrp" class="form-label">Accured Leaves</label>
+                  <input type="number" class="form-control" id="bloodgrp"  name ="bloodgrp" aria-describedby="emailHelp" required value="{{data.Accured_leaves}}">
                 </div>
 
                     <br>
                     <div class="mb-2">
                         <label for="jobtype">Employee Type</label>
-                        <select type="text" class="form-control" id="job_title" name="job_title" value={{post.job_title}} required>
+                        <select type="text" class="form-control" id="job_title" name="job_title" required>
                         <option value="Internal">Permannt</option>
                         <option value="External">Contractor</option>
                         </select>

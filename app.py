@@ -222,7 +222,9 @@ def CreateEmpPersonaldata():
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
 def edit(employee_id):
-    post=EmployeePersonal.query.filter_by(Employee_ID=employee_id).first()
+
+    employee = Employee.query.filter_by(Employee_ID = employee_id).first()
+    # post=EmployeePersonal.query.filter_by(Employee_ID=employee_id).first()
     if request.method == 'POST':
          employee_id=request.form.get('empid')
          marital_status=request.form.get('maritalstat')
@@ -241,7 +243,7 @@ def edit(employee_id):
          conn.commit()  
          flash("Personal details updated successfully")
          return redirect('/edit/<string:employee_id>')
-    return render_template("edit.html", post = post)
+    return render_template("edit.html", data = employee)
     
 #def editpersonaldata(employee_id):
 #     post=Personaldata.query.filter_by(employee_id=employee_id).first()
