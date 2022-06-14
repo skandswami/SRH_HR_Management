@@ -233,7 +233,6 @@ def CreateEmpPersonaldata():
 
 @app.route("/edit/<string:employee_id>", methods=['GET', 'POST'])
 def edit(employee_id):
-
     employee = Employee.query.filter_by(Employee_ID = employee_id).first()
     # post=EmployeePersonal.query.filter_by(Employee_ID=employee_id).first()
     if request.method == 'POST':
@@ -242,21 +241,21 @@ def edit(employee_id):
          First_Name=request.form.get('fname')
          Middle_Name=request.form.get('mname')
          Last_Name=request.form.get('lname')
-         Email=request.form.get('email')
+         Email=request.form.get('emailid')
          Mobile=request.form.get('mobile')
          Date_of_joining=request.form.get('doj')
          Manager_ID=request.form.get("managerid")
          Gender=request.form.get('gender')
          Accrued_leaves=request.form.get('accleaves')
-         
-
+         date_of_leaving=request.form.get('empdol')
+         emp_type=request.form.get('emptypid')
 
          conn = DatabaseConnection()
          cur = conn.cursor()  
-         cur.execute(f"Call public.update_personal_empdata (`{Employee_ID}`,`{Job_ID}`,`{First_Name}`,`{Middle_Name}`,`{Last_Name}`,`{Email}`,'{Mobile}',`{Date_of_joining}`,'{Manager_ID}','{Gender}','{Accrued_leaves}')")
+         cur.execute(f"Call public.hr_edit_employee ('{employee.Employee_ID}','{Job_ID}','{First_Name}','{Middle_Name}','{Last_Name}','{Email}','{Mobile}','{Date_of_joining}','{Manager_ID}','{Gender}','{Accrued_leaves}','1','1','{emp_type}','{date_of_leaving}')")
          conn.commit()  
          flash("Personal details updated successfully")
-         return redirect('/edit/<string:employee_id>')
+         return redirect('/DisplayEmpInfo')
     return render_template("edit.html", data = employee)
     
 #def editpersonaldata(employee_id):
