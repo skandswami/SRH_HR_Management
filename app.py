@@ -348,6 +348,10 @@ def createFinanceData():
         monthly_pension_deduction=request.form.get('monthly_pension_deduction')
         pf=request.form.get('pf')
         salary_creation_timestamp=request.form.get('salary_creation_timestamp')
+        employee = Employee.query.filter_by(Employee_ID=employee_id).first()
+        if employee is None:
+            flash("Not a registered employee")
+            return render_template("CreateFinanceData.html")
         conn = DatabaseConnection()
         cur = conn.cursor()
         cur.execute(f"Call public.sp_emp_finance_info('{emp_bank_id}', '{employee_id}', '{bank_acc_id}', '{bank_name}', '{bank_acc_number}', '{bank_iban}', '{bank_location}', '{start_date}', '{end_date}', '{salary_id}', '{bonus}', '{salary_band}', '{monthly_salary}', '{annual_salary}', '{monthly_tax_deduction}', '{monthly_insurance_deduction}', '{monthly_pension_deduction}', '{pf}', '{salary_creation_timestamp}')")
@@ -383,6 +387,10 @@ def updateFinanceData():
 def deleteFinancedata():
     if request.method == 'POST':
         employee_id=request.form.get('employee_id')
+        employee = Employee.query.filter_by(Employee_ID=employee_id).first()
+        if employee is None:
+            flash("Not a registered employee")
+            return render_template("DeleteFinanceData.html")
         conn = DatabaseConnection()
         cur = conn.cursor()
         cur.execute(f"Call public.sp_emp_finance_delete('{employee_id}')")
@@ -421,6 +429,10 @@ def createDeptData():
         department_id=request.form.get('deptid')
         join_date=request.form.get('join_date')
         leave_date=request.form.get('leave_date')
+        employee = Employee.query.filter_by(Employee_ID=employee_id).first()
+        if employee is None:
+            flash("Not a registered employee")
+            return render_template("CreateDeptData.html")
         conn = DatabaseConnection()
         cur = conn.cursor()
         cur.execute(f"Call public.sp_emp_dept('{emp_dept_id}', '{department_id}', '{employee_id}', '{join_date}', '{leave_date}')")
@@ -448,6 +460,10 @@ def updateDeptdata():
 def deleteDeptdata():
     if request.method == 'POST':
         employee_id=request.form.get('employee_id')
+        employee = Employee.query.filter_by(Employee_ID=employee_id).first()
+        if employee is None:
+            flash("Not a registered employee")
+            return render_template("DeleteDeptData.html")
         conn = DatabaseConnection()
         cur = conn.cursor()
         cur.execute(f"Call public.sp_emp_dept_delete('{employee_id}')")
