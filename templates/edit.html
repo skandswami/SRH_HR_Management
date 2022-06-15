@@ -118,11 +118,11 @@
             <div class = "col-md-5 jumbotron">
                 <h4 class = "text-center">Update Employee Details</h4>
                 <br>
-                <form action="/edit/{{data.employee_id}}" method="post">
+                <form action="/edit/{{data.Employee_ID}}" method="post">
 
                 <div class="mb-2">
                     <label for="Employee_ID" class="form-label">Employee ID</label>
-                    <label type="number" class="form-control" id="Employee_ID" name = "Employee_ID" aria-describedby="emailHelp" value="{{data.Employee_ID}}">{{data.Employee_ID}}</label>
+                    <label type="number" class="form-control" id="empid" name = "Employee_ID" aria-describedby="emailHelp" value="{{data.Employee_ID}}">{{data.Employee_ID}}</label>
                 </div>
 
                 <div class="mb-2">
@@ -175,7 +175,17 @@
                   <input type="number" class="form-control" id="accleaves"  name ="accleaves" aria-describedby="emailHelp" required value="{{data.Accured_leaves}}">
                 </div>
 
-                    <br>
+                <div class="mb-2">
+                  <label for="emptypid" class="form-label">Employee Type ID</label>
+                  <input type="text" class="form-control" id="emptypid"  name ="emptypid" aria-describedby="emailHelp" required value="{{data.Emp_Type_ID}}">
+                </div>
+
+                <div class="mb-2">
+                  <label for="empdol" class="form-label">Date of Leaving</label>
+                  <input type="date" class="form-control" id="empdol"  name ="empdol" aria-describedby="emailHelp" required value="{{data.date_of_leaving}}">
+                </div>
+
+                <br>
                     <div class="mb-2">
                         <label for="jobtype">Employee Type</label>
                         <select type="text" class="form-control" id="job_title" name="job_title" required>
@@ -184,7 +194,7 @@
                         </select>
                     </div>
                     <br>
-                   <button type="submit" class="btn btn-primary btn btn-warning btn-small btn-block">Update</button>
+                <button type="submit" class="btn btn-primary btn btn-warning btn-small btn-block">Update</button>
                 </form>
     
             </div>
